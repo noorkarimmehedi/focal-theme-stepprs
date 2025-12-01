@@ -74,7 +74,7 @@
             "background_image": "shopify://shop_images/AJ6541_db4c1464-d5a8-48e0-9ad5-fa06850e0e42.webp",
             "placeholder_color": "#f3f3f3",
             "overlay_color": "#000000",
-            "overlay_opacity": 15,
+            "overlay_opacity": 10,
             "glassmorphism_color": "#ffffff",
             "glassmorphism_opacity": 8,
             "blur_amount": 3,
