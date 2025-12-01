@@ -110,28 +110,28 @@
           "link_box_j6BAHj": {
             "type": "link_box",
             "settings": {
-              "text": "Privacy Policy",
+              "text": "About us",
               "url": ""
             }
           },
           "link_box_CWCYP7": {
             "type": "link_box",
             "settings": {
-              "text": "Privacy Policy",
+              "text": "Terms and conditions",
               "url": ""
             }
           },
           "link_box_3mtNNr": {
             "type": "link_box",
             "settings": {
-              "text": "Privacy Policy",
+              "text": "Terms and conditions",
               "url": ""
             }
           },
           "link_box_ryaxBX": {
             "type": "link_box",
             "settings": {
-              "text": "Privacy Policy",
+              "text": "Return and cancellation policy",
               "url": ""
             }
           }
