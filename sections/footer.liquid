@@ -184,19 +184,24 @@
     }
 
     #shopify-section-{{ section.id }} .premium-footer__box-grid {
-      gap: 7px;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      max-width: 100%;
     }
 
     #shopify-section-{{ section.id }} .premium-footer__box {
-      padding: 10px;
+      padding: 20px 16px;
+      min-height: 70px;
     }
 
     #shopify-section-{{ section.id }} .premium-footer__box-text {
-      font-size: 9px;
+      font-size: 12px;
     }
 
     #shopify-section-{{ section.id }} .premium-footer__social-links {
       gap: 20px;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     #shopify-section-{{ section.id }} .premium-footer__social-left {
