@@ -1,6 +1,593 @@
+{% doc %}
+  @prompt
+    generate a beautiful ingredient section with images in mobile there should be a bottom title in same row with scrollable , still don't like it it should be like when i hover on a image it should becomes bigger with an animation and others should be small and aqll detains gets visible when hovers , apply these: Border
+    Border width
+    
+    1
+    
+    Border color
+    
+    
+    #E0E0E0
+    
+    Hover border color
+    
+    
+    #CCCCCC
+    
+    Border radius
+    
+    8
+    
+    Shadow
+    Horizontal offset
+    
+    0
+    
+    Vertical offset
+    
+    4
+    
+    Blur radius
+    
+    8
+    
+    Shadow opacity
+    
+    0
+    
+    
+    , i want this type of: You are given a task to integrate an existing React component in the codebase
+    
+    The codebase should support:
+    - shadcn project structure  
+    - Tailwind CSS
+    - Typescript
+    
+    If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+    
+    Determine the default path for components and styles. 
+    If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+    Copy-paste this component to /components/ui folder:
+    ```tsx
+    expand-cards.tsx
+    "use client";
+    
+    import { useState } from "react";
+    
+    const images = [
+      "https://pbs.twimg.com/media/G6dpB9JaAAA2wDS?format=png&name=360x360",
+      "https://pbs.twimg.com/media/G6dpEiebIAEHrOS?format=jpg&name=360x360",
+      "https://pbs.twimg.com/media/G6dpGJZbsAEg1tp?format=png&name=360x360",
+      "https://pbs.twimg.com/media/G6dpHzVbkAERJI3?format=png&name=360x360",
+      "https://pbs.twimg.com/media/G6dpKpcbgAAj7ce?format=png&name=360x360",
+      "https://pbs.twimg.com/media/G6dpNYzawAAniIt?format=png&name=360x360",
+      "https://pbs.twimg.com/media/G6dpPilbcAAH3jU?format=jpg&name=360x360",
+      "https://pbs.twimg.com/media/G6dpRFBbsAEvquO?format=jpg&name=360x360",
+      "https://pbs.twimg.com/media/G6dpUL-aUAAUqGZ?format=png&name=small",
+    ];
+    
+    const ExpandOnHover = () => {
+      const [expandedImage, setExpandedImage] = useState(3);
+    
+      const getImageWidth = (index: number) =>
+        index === expandedImage ? "24rem" : "5rem";
+    
+      return (
+        <div className="w-full h-screen bg-[#f5f4f3]">
+          <div className="relative grid min-h-screen grid-cols-1 items-center justify-center p-2 transition-all duration-300 ease-in-out lg:flex w-full">
+            <div className="w-full h-full overflow-hidden rounded-3xl">
+              <div className="flex h-full w-full items-center justify-center overflow-hidden bg-[#f5f4f3]">
+                <div className="relative w-full max-w-6xl px-5">
+                  <div className="flex w-full items-center justify-center gap-1">
+                    {images.m, revert to previous one , i don't like the hover animation it should be more smooth with card size expension, still don't like the design and all
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-ingredient-section-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-ingredient-container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .ai-ingredient-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .ai-ingredient-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 12px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .ai-ingredient-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ai-ingredient-grid-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.grid_gap }}px;
+    align-items: stretch;
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }} {
+    position: relative;
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+    transition: flex 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: {{ block.settings.card_background }};
+  }
+
+  .ai-ingredient-image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.card_height }}px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-ingredient-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ai-ingredient-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-ingredient-image-placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.2;
+  }
+
+  .ai-ingredient-content-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 40%, transparent 100%);
+    transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ai-ingredient-name-{{ ai_gen_id }} {
+    font-size: {{ block.settings.ingredient_name_size }}px;
+    color: #ffffff;
+    font-weight: 700;
+    margin: 0 0 8px;
+    writing-mode: horizontal-tb;
+    transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ai-ingredient-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.ingredient_description_size }}px;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }}:hover {
+    flex: 3;
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }}:hover .ai-ingredient-image-{{ ai_gen_id }} {
+    transform: scale(1.08);
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }}:hover .ai-ingredient-content-{{ ai_gen_id }} {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.3) 100%);
+    padding: 32px;
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }}:hover .ai-ingredient-name-{{ ai_gen_id }} {
+    font-size: calc({{ block.settings.ingredient_name_size }}px * 1.2);
+    margin-bottom: 12px;
+  }
+
+  .ai-ingredient-item-{{ ai_gen_id }}:hover .ai-ingredient-description-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-ingredient-grid-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: {{ block.settings.mobile_gap }}px;
+    }
+
+    .ai-ingredient-item-{{ ai_gen_id }} {
+      flex: none;
+      width: 100%;
+    }
+
+    .ai-ingredient-image-wrapper-{{ ai_gen_id }} {
+      height: {{ block.settings.mobile_card_height }}px;
+    }
+
+    .ai-ingredient-item-{{ ai_gen_id }}:hover .ai-ingredient-name-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.ingredient_name_size }}px * 1.1);
+    }
+  }
+{% endstyle %}
+
+<div class="ai-ingredient-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-ingredient-container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank or block.settings.subtitle != blank %}
+      <div class="ai-ingredient-header-{{ ai_gen_id }}">
+        {% if block.settings.title != blank %}
+          <h2 class="ai-ingredient-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+        {% endif %}
+        {% if block.settings.subtitle != blank %}
+          <div class="ai-ingredient-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-ingredient-grid-{{ ai_gen_id }}">
+      {% for i in (1..6) %}
+        {% liquid
+          assign image_key = 'ingredient_' | append: i | append: '_image'
+          assign name_key = 'ingredient_' | append: i | append: '_name'
+          assign description_key = 'ingredient_' | append: i | append: '_description'
+          
+          assign ingredient_image = block.settings[image_key]
+          assign ingredient_name = block.settings[name_key]
+          assign ingredient_description = block.settings[description_key]
+        %}
+
+        <div class="ai-ingredient-item-{{ ai_gen_id }}">
+          <div class="ai-ingredient-image-wrapper-{{ ai_gen_id }}">
+            {% if ingredient_image %}
+              <img
+                src="{{ ingredient_image | image_url: width: 800 }}"
+                alt="{{ ingredient_image.alt | escape }}"
+                loading="lazy"
+                width="800"
+                height="{{ block.settings.card_height }}"
+                class="ai-ingredient-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-ingredient-image-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+            
+            <div class="ai-ingredient-content-{{ ai_gen_id }}">
+              {% if ingredient_name != blank %}
+                <h3 class="ai-ingredient-name-{{ ai_gen_id }}">{{ ingredient_name }}</h3>
+              {% endif %}
+              
+              {% if ingredient_description != blank %}
+                <p class="ai-ingredient-description-{{ ai_gen_id }}">{{ ingredient_description }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Ingredient showcase",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Pure Natural Ingredients"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover the power of nature in every ingredient we carefully select"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Header spacing",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_1_name",
+      "label": "Name",
+      "default": "Aloe Vera"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_1_description",
+      "label": "Description",
+      "default": "Natural healing and deep hydration for radiant, healthy skin"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_2_name",
+      "label": "Name",
+      "default": "Green Tea"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_2_description",
+      "label": "Description",
+      "default": "Powerful antioxidants that protect and rejuvenate your skin"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_3_name",
+      "label": "Name",
+      "default": "Vitamin C"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_3_description",
+      "label": "Description",
+      "default": "Brightens complexion and evens skin tone naturally"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_4_name",
+      "label": "Name",
+      "default": "Hyaluronic Acid"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_4_description",
+      "label": "Description",
+      "default": "Intense moisture retention for plump, youthful-looking skin"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_5_name",
+      "label": "Name",
+      "default": "Coconut Oil"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_5_description",
+      "label": "Description",
+      "default": "Deep nourishment and protection for your skin barrier"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "ingredient_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "ingredient_6_name",
+      "label": "Name",
+      "default": "Shea Butter"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredient_6_description",
+      "label": "Description",
+      "default": "Rich, luxurious hydration that softens and repairs"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card gap",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 300,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Card height",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_height",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile card height",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "min": 12,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile gap",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "ingredient_name_size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Ingredient name size",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "ingredient_description_size",
+      "min": 13,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#666666"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ingredient showcase"
+    }
+  ]
+}
 {% endschema %}
