@@ -1,6 +1,774 @@
+{% doc %}
+  @prompt
+    generate a modern collection section for me which should be fit in both mobile and desktop. also the text should have animation and UI should be translucent glass morphism UI , should have the option to move the Glass Morphism card for the product name price . eveyrhing should be customizable from font to color to radius, in mobile version there should be two product per row and in desktop version there should be four products in every row , in mobile version the Glass morphism card's card text size isn't optimised for mobile version 
+    , can you reduce the left and right side gap a little on desktop version , still so much gap on left and right side on desktop version , can you reduce a little bit more on desktop version on left and right side
+    , applied mobile optimizations: 12px container padding, removed product margins, prevented horizontal scrolling, max width control
+    , desktop: reduced left/right padding to 24px
+    , added plus icon add to cart button on glass card right side center
+    , updated to work with Focal theme cart-count component
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-collection-section-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding_top }}px 24px {{ block.settings.section_padding_bottom }}px;
+    background: {{ block.settings.background_color }};
+    overflow: hidden;
+  }
+
+  .ai-collection-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-collection-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .ai-collection-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    font-weight: {{ block.settings.title_weight }};
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .ai-collection-title-{{ ai_gen_id }}.animate {
+    animation: ai-fade-up-{{ ai_gen_id }} 0.8s ease forwards;
+  }
+
+  .ai-collection-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    margin: 0;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .ai-collection-description-{{ ai_gen_id }}.animate {
+    animation: ai-fade-up-{{ ai_gen_id }} 0.8s ease 0.2s forwards;
+  }
+
+  @keyframes ai-fade-up-{{ ai_gen_id }} {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ai-products-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: {{ block.settings.product_gap_mobile }}px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    position: relative;
+    list-style: none;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .ai-product-card-{{ ai_gen_id }}.animate {
+    animation: ai-fade-up-{{ ai_gen_id }} 0.6s ease forwards;
+  }
+
+  .ai-product-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_radius }}px;
+    background: {{ block.settings.image_background }};
+  }
+
+  .ai-product-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-glass-card-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: {{ block.settings.card_position_bottom }}px;
+    left: {{ block.settings.card_position_left }}px;
+    right: {{ block.settings.card_position_right }}px;
+    background: {{ block.settings.glass_background }};
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border: {{ block.settings.glass_border_width }}px solid {{ block.settings.glass_border_color }};
+    border-radius: {{ block.settings.glass_radius }}px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .ai-glass-content-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.product_title_size_mobile }}px;
+    color: {{ block.settings.product_title_color }};
+    margin: 0 0 4px;
+    font-weight: {{ block.settings.product_title_weight }};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ai-product-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.product_price_size_mobile }}px;
+    color: {{ block.settings.product_price_color }};
+    margin: 0;
+    font-weight: {{ block.settings.product_price_weight }};
+  }
+
+  .ai-add-to-cart-btn-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: {{ block.settings.button_background }};
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .ai-add-to-cart-btn-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_background }};
+    transform: scale(1.1);
+  }
+
+  .ai-add-to-cart-btn-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    stroke: {{ block.settings.button_icon_color }};
+    stroke-width: 2;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ai-collection-section-{{ ai_gen_id }} {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .ai-products-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(4, 1fr);
+      gap: {{ block.settings.product_gap_desktop }}px;
+    }
+
+    .ai-collection-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 1.5 }}px;
+    }
+
+    .ai-collection-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size | times: 1.2 }}px;
+    }
+
+    .ai-glass-card-{{ ai_gen_id }} {
+      padding: 12px 14px;
+    }
+
+    .ai-product-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.product_title_size_desktop }}px;
+      margin-bottom: 6px;
+    }
+
+    .ai-product-price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.product_price_size_desktop }}px;
+    }
+
+    .ai-add-to-cart-btn-{{ ai_gen_id }} {
+      width: 36px;
+      height: 36px;
+    }
+
+    .ai-add-to-cart-btn-{{ ai_gen_id }} svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-collection-section-{{ ai_gen_id }} {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+{% endstyle %}
+
+<modern-collection-{{ ai_gen_id }}
+  class="ai-collection-section-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-collection-container-{{ ai_gen_id }}">
+    {% if block.settings.show_header %}
+      <div class="ai-collection-header-{{ ai_gen_id }}">
+        {% if block.settings.title != blank %}
+          <h2 class="ai-collection-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+        {% endif %}
+        {% if block.settings.description != blank %}
+          <p class="ai-collection-description-{{ ai_gen_id }}">{{ block.settings.description }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.collection != blank %}
+      <ul class="ai-products-grid-{{ ai_gen_id }}">
+        {% for product in block.settings.collection.products limit: block.settings.products_limit %}
+          <li class="ai-product-card-{{ ai_gen_id }}" data-index="{{ forloop.index }}">
+            <div class="ai-product-image-wrapper-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="ai-product-image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="600"
+                  height="750"
+                >
+              {% else %}
+                <div class="ai-product-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+
+              <div class="ai-glass-card-{{ ai_gen_id }}">
+                <div class="ai-glass-content-{{ ai_gen_id }}">
+                  <h3 class="ai-product-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+                  <p class="ai-product-price-{{ ai_gen_id }}">{{ product.price | money }}</p>
+                </div>
+                <button
+                  class="ai-add-to-cart-btn-{{ ai_gen_id }}"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                  aria-label="Add {{ product.title }} to cart"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div style="text-align: center; padding: 40px 20px; color: #999;">
+        <p>Select a collection to display products</p>
+      </div>
+    {% endif %}
+  </div>
+</modern-collection-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ModernCollection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.observer = null;
+      }
+
+      connectedCallback() {
+        this.setupIntersectionObserver();
+        this.setupAddToCart();
+      }
+
+      setupIntersectionObserver() {
+        const options = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        this.observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animate');
+              this.observer.unobserve(entry.target);
+            }
+          });
+        }, options);
+
+        const title = this.querySelector('.ai-collection-title-{{ ai_gen_id }}');
+        const description = this.querySelector('.ai-collection-description-{{ ai_gen_id }}');
+        const cards = this.querySelectorAll('.ai-product-card-{{ ai_gen_id }}');
+
+        if (title) this.observer.observe(title);
+        if (description) this.observer.observe(description);
+
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${0.1 * index}s`;
+          this.observer.observe(card);
+        });
+      }
+
+      setupAddToCart() {
+        const buttons = this.querySelectorAll('.ai-add-to-cart-btn-{{ ai_gen_id }}');
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const variantId = button.dataset.variantId;
+            this.addToCart(variantId, button);
+          });
+        });
+      }
+
+      async addToCart(variantId, button) {
+        const originalHTML = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: variantId,
+              quantity: 1
+            })
+          });
+
+          if (response.ok) {
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+            const cartCountElement = document.querySelector('cart-count');
+            if (cartCountElement) {
+              const countResponse = await fetch('/cart.js');
+              const cart = await countResponse.json();
+              cartCountElement.setAttribute('count', cart.item_count);
+            }
+
+            setTimeout(() => {
+              button.innerHTML = originalHTML;
+              button.disabled = false;
+            }, 1500);
+          } else {
+            throw new Error('Failed to add to cart');
+          }
+        } catch (error) {
+          button.innerHTML = originalHTML;
+          button.disabled = false;
+          console.error('Error adding to cart:', error);
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.observer) {
+          this.observer.disconnect();
+        }
+      }
+    }
+
+    customElements.define('modern-collection-{{ ai_gen_id }}', ModernCollection{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Modern collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "label": "Products to show",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Max width",
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size (mobile)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Title weight",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Title spacing",
+      "default": 12
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover our curated selection of premium products"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Header bottom spacing",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "range",
+      "id": "product_gap_mobile",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap (mobile)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "product_gap_desktop",
+      "min": 16,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap (desktop)",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "header",
+      "content": "Glass card"
+    },
+    {
+      "type": "color",
+      "id": "glass_background",
+      "label": "Background",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Blur amount",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "glass_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "glass_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "range",
+      "id": "glass_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_position_bottom",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Position from bottom",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "card_position_left",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Position from left",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "card_position_right",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Position from right",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Product title"
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "product_title_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (mobile)",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "product_title_size_desktop",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (desktop)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "product_title_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Weight",
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Product price"
+    },
+    {
+      "type": "color",
+      "id": "product_price_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "product_price_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (mobile)",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "product_price_size_desktop",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (desktop)",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "product_price_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Weight",
+      "default": 500
+    },
+    {
+      "type": "header",
+      "content": "Add to cart button"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Icon color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Modern collection"
+    }
+  ]
+}
 {% endschema %}
