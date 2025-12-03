@@ -117,7 +117,7 @@
             "show_header": true,
             "heading": "Featured Collection",
             "description": "<p>Discover our curated selection of premium products</p>",
-            "text_alignment": "center",
+            "text_alignment": "left",
             "container_width": 1600,
             "grid_gap": 15,
             "card_position": "absolute",
