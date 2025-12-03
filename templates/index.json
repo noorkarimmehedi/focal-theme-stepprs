@@ -106,6 +106,60 @@
       ],
       "settings": {}
     },
+    "176474831120bb5e68": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_eb7330a_WUFPnM": {
+          "type": "ai_gen_block_eb7330a",
+          "settings": {
+            "collection": "frontpage",
+            "products_limit": 8,
+            "background_color": "#ffffff",
+            "section_padding_top": 50,
+            "section_padding_bottom": 50,
+            "max_width": 1400,
+            "show_header": true,
+            "title": "Featured Collection",
+            "title_color": "#000000",
+            "title_size": 28,
+            "title_weight": 700,
+            "title_spacing": 12,
+            "description": "Discover our curated selection of premium products",
+            "description_color": "#666666",
+            "description_size": 14,
+            "header_spacing": 40,
+            "product_gap_mobile": 12,
+            "product_gap_desktop": 24,
+            "image_radius": 12,
+            "image_background": "#f5f5f5",
+            "glass_background": "rgba(255, 255, 255, 0.2)",
+            "glass_blur": 10,
+            "glass_border_width": 1,
+            "glass_border_color": "rgba(255, 255, 255, 0.3)",
+            "glass_radius": 8,
+            "card_position_bottom": 10,
+            "card_position_left": 10,
+            "card_position_right": 10,
+            "product_title_color": "#ffffff",
+            "product_title_size_mobile": 12,
+            "product_title_size_desktop": 14,
+            "product_title_weight": 600,
+            "product_price_color": "#ffffff",
+            "product_price_size_mobile": 11,
+            "product_price_size_desktop": 13,
+            "product_price_weight": 500,
+            "button_background": "#000000",
+            "button_hover_background": "#333333",
+            "button_icon_color": "#ffffff"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_eb7330a_WUFPnM"
+      ],
+      "settings": {}
+    },
     "featured-collections": {
       "type": "featured-collections",
       "blocks": {
@@ -132,6 +186,7 @@
         "collection_7QWkqU",
         "collection-1"
       ],
+      "disabled": true,
       "settings": {
         "subheading": "",
         "title": "Collection",
@@ -566,6 +621,7 @@
   "order": [
     "slideshow",
     "1764588401a77ff989",
+    "176474831120bb5e68",
     "featured-collections",
     "horizontal_category_card_nh8rG6",
     "image-with-text",
