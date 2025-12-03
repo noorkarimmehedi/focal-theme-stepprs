@@ -1,246 +1,445 @@
-{% doc %}
-  @prompt
-    “Create a premium product hero section on a black background with rounded edges. Place a 3D smartphone render on the right and a vertical stack of pill-shaped feature buttons with plus icons on the left. Use soft shadows, modern typography, smooth spacing, and a clean, futuristic tech aesthetic.”
-{% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% comment %}
+  Interactive Details & Image Hero Section
+  Features expandable details with synchronized image carousel
+{% endcomment %}
+
+{% assign section_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
-  .ai-hero-section-{{ ai_gen_id }} {
-    background-color: {{ block.settings.background_color }};
-    border-radius: {{ block.settings.border_radius }}px;
-    padding: {{ block.settings.section_padding }}px 20px;
+  /* Base Variables */
+  .section-{{ section_id }} {
+    --ease: cubic-bezier(.42,0,.58,1);
+    --bounce: linear(
+      0 0%, 0.4214 6.61%, 0.5762 9.59%,
+      0.7047 12.55%, 0.8115 15.61%,
+      0.8964 18.78%, 0.9614 22.13%,
+      1.0078 25.74%, 1.0282 28.18%,
+      1.0422 30.82%, 1.0503 33.7%,
+      1.0527 36.95%, 1.0468 42.53%,
+      1.015 58.45%, 1.0045 67.2%,
+      0.9987 80.44%, 1 100%
+    );
+    --speed: {{ section.settings.animation_speed }}s;
+    --width: {{ section.settings.details_width }}px;
+    --sizing: {{ section.settings.button_height }}px;
+    --distance: 15%;
+    --background: {{ section.settings.button_background }};
+    --hover-background: {{ section.settings.button_hover_background }};
+  }
+
+  /* Main Section */
+  .section-{{ section_id }} .hero-wrapper {
+    margin: {{ section.settings.section_margin }}px auto;
+    display: flex;
+    place-items: center;
+    gap: 1rem;
+    position: relative;
+    min-height: {{ section.settings.min_height }}px;
+    aspect-ratio: 4 / 3;
+    justify-content: flex-start;
     overflow: hidden;
+    max-width: calc(100vw - 2rem);
+    width: {{ section.settings.max_width }}px;
+    border-radius: {{ section.settings.border_radius }}px;
+    background: {{ section.settings.background_color }};
+    border: 2px solid {{ section.settings.border_color }};
   }
 
-  .ai-hero-container-{{ ai_gen_id }} {
-    max-width: {{ block.settings.max_width }}px;
-    margin: 0 auto;
+  /* Details Column */
+  .section-{{ section_id }} .details-column {
+    padding-left: 4rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+    grid-auto-rows: auto;
+    width: var(--width);
+    place-items: center;
+    justify-items: start;
+    gap: 0.5rem;
+    z-index: 20;
+    flex: 1 0 var(--width);
   }
 
-  .ai-hero-content-{{ ai_gen_id }} {
-    display: flex;
-    flex-direction: column;
-    gap: {{ block.settings.content_spacing }}px;
-  }
-
-  .ai-hero-heading-{{ ai_gen_id }} {
-    font-size: {{ block.settings.heading_size }}px;
-    font-weight: 700;
-    color: {{ block.settings.heading_color }};
-    line-height: 1.2;
-    margin: 0;
-    letter-spacing: -0.02em;
-  }
-
-  .ai-hero-description-{{ ai_gen_id }} {
-    font-size: {{ block.settings.description_size }}px;
-    color: {{ block.settings.description_color }};
-    line-height: 1.6;
-    margin: 0;
-    opacity: 0.9;
-  }
-
-  .ai-hero-features-{{ ai_gen_id }} {
-    display: flex;
-    flex-direction: column;
-    gap: {{ block.settings.feature_spacing }}px;
-    margin-top: 10px;
-  }
-
-  .ai-hero-feature-{{ ai_gen_id }} {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: {{ block.settings.feature_padding }}px {{ block.settings.feature_padding | times: 1.5 }}px;
-    background-color: {{ block.settings.feature_bg_color }};
-    border-radius: {{ block.settings.feature_border_radius }}px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y }}px {{ block.settings.shadow_blur }}px {{ block.settings.shadow_color }};
-    border: 1px solid {{ block.settings.feature_border_color }};
-  }
-
-  .ai-hero-feature-{{ ai_gen_id }}:hover {
-    transform: translateX(8px);
-    box-shadow: {{ block.settings.shadow_x | times: 1.5 }}px {{ block.settings.shadow_y | times: 1.5 }}px {{ block.settings.shadow_blur | times: 1.5 }}px {{ block.settings.shadow_color }};
-    background-color: {{ block.settings.feature_hover_bg_color }};
-  }
-
-  .ai-hero-feature-icon-{{ ai_gen_id }} {
-    width: {{ block.settings.icon_size }}px;
-    height: {{ block.settings.icon_size }}px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: {{ block.settings.icon_bg_color }};
-    border-radius: 50%;
-  }
-
-  .ai-hero-feature-icon-{{ ai_gen_id }} svg {
-    width: {{ block.settings.icon_size | times: 0.5 }}px;
-    height: {{ block.settings.icon_size | times: 0.5 }}px;
-    stroke: {{ block.settings.icon_color }};
-    stroke-width: 2.5;
-  }
-
-  .ai-hero-feature-text-{{ ai_gen_id }} {
-    font-size: {{ block.settings.feature_text_size }}px;
-    color: {{ block.settings.feature_text_color }};
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .ai-hero-image-wrapper-{{ ai_gen_id }} {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-  }
-
-  .ai-hero-image-{{ ai_gen_id }} {
+  /* Image Column */
+  .section-{{ section_id }} .image-column {
     width: 100%;
-    height: auto;
-    max-width: 500px;
-    display: block;
-    filter: drop-shadow({{ block.settings.image_shadow_x }}px {{ block.settings.image_shadow_y }}px {{ block.settings.image_shadow_blur }}px {{ block.settings.image_shadow_color }});
-  }
-
-  .ai-hero-image-placeholder-{{ ai_gen_id }} {
-    width: 100%;
-    max-width: 500px;
-    aspect-ratio: 1;
-    background: linear-gradient(135deg, {{ block.settings.placeholder_gradient_start }} 0%, {{ block.settings.placeholder_gradient_end }} 100%);
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
     position: relative;
-    filter: drop-shadow({{ block.settings.image_shadow_x }}px {{ block.settings.image_shadow_y }}px {{ block.settings.image_shadow_blur }}px {{ block.settings.image_shadow_color }});
-  }
-
-  .ai-hero-image-placeholder-{{ ai_gen_id }} svg {
-    width: 60%;
-    height: 60%;
-    opacity: 0.3;
-  }
-
-  .ai-hero-empty-state-{{ ai_gen_id }} {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 24px;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
+    display: grid;
+    place-items: center;
     pointer-events: none;
   }
 
+  .section-{{ section_id }} .img-block {
+    position: absolute;
+    inset: 0;
+  }
+
+  .section-{{ section_id }} .img-wrapper {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    transform: translateX(0);
+    transition-property: transform, opacity, scale;
+    transition-duration: calc(var(--speed) * 0), calc(var(--speed) * 0.35), calc(var(--speed) * 1.15);
+    transition-timing-function: var(--ease), var(--ease), var(--bounce);
+    transform-origin: 100% 150%;
+  }
+
+  .section-{{ section_id }} .img-wrapper img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    aspect-ratio: 1;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* Image positioning states */
+  .section-{{ section_id }} .img-block:nth-of-type(1) {
+    z-index: 10;
+  }
+
+  .section-{{ section_id }} .img-block:nth-of-type(1) .img-wrapper {
+    transform-origin: 50% 50%;
+    transition-duration: calc(var(--speed) * .4), calc(var(--speed) * 0.35), calc(var(--speed) * 1.15);
+    transition-timing-function: ease-in, var(--ease), var(--bounce);
+  }
+
+  /* Active image states */
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(1)[open]) .image-column .img-block:nth-of-type(2),
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(2)[open]) .image-column .img-block:nth-of-type(3),
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(3)[open]) .image-column .img-block:nth-of-type(4),
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(4)[open]) .image-column .img-block:nth-of-type(5),
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(5)[open]) .image-column .img-block:nth-of-type(6),
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(6)[open]) .image-column .img-block:nth-of-type(7) {
+    translate: var(--distance) 0;
+    z-index: 2;
+  }
+
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(1)[open]) .image-column .img-block:nth-of-type(2) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(2)[open]) .image-column .img-block:nth-of-type(3) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(3)[open]) .image-column .img-block:nth-of-type(4) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(4)[open]) .image-column .img-block:nth-of-type(5) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(5)[open]) .image-column .img-block:nth-of-type(6) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:has(details:nth-of-type(6)[open]) .image-column .img-block:nth-of-type(7) .img-wrapper {
+    transform: translateX(calc(var(--distance) * -1));
+    transition-delay: calc(var(--speed) * 0.2);
+  }
+
+  /* Inactive image states */
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(1)[open])) .image-column .img-block:nth-of-type(2) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(2)[open])) .image-column .img-block:nth-of-type(3) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(3)[open])) .image-column .img-block:nth-of-type(4) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(4)[open])) .image-column .img-block:nth-of-type(5) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(5)[open])) .image-column .img-block:nth-of-type(6) .img-wrapper,
+  .section-{{ section_id }} .hero-wrapper:not(:has(details:nth-of-type(6)[open])) .image-column .img-block:nth-of-type(7) .img-wrapper {
+    transition-property: translate, opacity, scale;
+    transition-timing-function: ease-in, ease-out, ease-in;
+    translate: 0 0;
+    scale: 0.9;
+    opacity: 0;
+  }
+
+  /* First image special case */
+  .section-{{ section_id }} .hero-wrapper:not(:has([open])) .image-column .img-block:first-of-type .img-wrapper {
+    transform: translateX(0%);
+    transition-delay: calc(var(--speed) * 0.2);
+  }
+
+  .section-{{ section_id }} .hero-wrapper:has([open]) .image-column .img-block:first-of-type .img-wrapper {
+    translate: 0 0;
+    scale: 1.25;
+    opacity: 0;
+  }
+
+  /* Details Styling */
+  .section-{{ section_id }} details {
+    display: inline-block;
+    border-radius: calc(var(--sizing) * 0.5);
+    overflow: hidden;
+    min-height: var(--sizing);
+    background: var(--background);
+    backdrop-filter: blur(20px) saturate(180%);
+    color: {{ section.settings.text_color }};
+    transition: background 0.2s var(--ease);
+  }
+
+  .section-{{ section_id }} details:hover:not([open]) {
+    background: var(--hover-background);
+  }
+
+  .section-{{ section_id }} summary {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 1.5rem;
+    border-radius: calc(var(--sizing) * 0.5);
+    height: var(--sizing);
+    min-height: var(--sizing);
+    cursor: pointer;
+    z-index: 20;
+    position: relative;
+    transition-property: opacity, width;
+    transition-duration: calc(var(--speed) * 0.5), calc(var(--speed) * 1.5);
+    transition-timing-function: var(--ease), var(--bounce);
+    transition-delay: calc(var(--speed) * 1.05), 0s;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: {{ section.settings.summary_font_size }}px;
+    list-style: none;
+  }
+
+  .section-{{ section_id }} summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .section-{{ section_id }} summary svg {
+    width: 24px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+  }
+
+  .section-{{ section_id }} [open] summary {
+    opacity: 0;
+    pointer-events: none;
+    transition-delay: 0s;
+    width: var(--width);
+  }
+
+  .section-{{ section_id }} .details-content {
+    width: var(--width);
+    min-height: var(--sizing);
+    padding: 1.5rem;
+    font-size: {{ section.settings.content_font_size }}px;
+    line-height: 1.6;
+  }
+
+  .section-{{ section_id }} .details-content p {
+    margin: 0;
+  }
+
+  .section-{{ section_id }} .details-content a {
+    color: {{ section.settings.link_color }};
+    text-decoration: underline;
+  }
+
+  /* Navigation Controls */
+  .section-{{ section_id }} [data-action] {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    aspect-ratio: 1;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--background);
+    transition: opacity 0.26s var(--ease), background 0.26s var(--ease), transform 0.26s var(--ease);
+    z-index: 20;
+    position: absolute;
+  }
+
+  .section-{{ section_id }} [data-action]:hover {
+    background: var(--hover-background);
+  }
+
+  .section-{{ section_id }} [data-action] svg {
+    width: 22px;
+    color: {{ section.settings.text_color }};
+    stroke-width: 3;
+  }
+
+  .section-{{ section_id }} [data-action="next"],
+  .section-{{ section_id }} [data-action="previous"] {
+    top: 50%;
+    left: 1rem;
+  }
+
+  .section-{{ section_id }} [data-action="previous"] {
+    translate: 0 -150%;
+  }
+
+  .section-{{ section_id }} [data-action="next"] {
+    translate: 0 50%;
+  }
+
+  .section-{{ section_id }} [data-action="next"] svg {
+    rotate: 180deg;
+  }
+
+  .section-{{ section_id }} [data-action="exit"] {
+    right: 1rem;
+    top: 1rem;
+  }
+
+  .section-{{ section_id }} [data-action="exit"] svg {
+    rotate: 45deg;
+  }
+
+  .section-{{ section_id }} .hero-wrapper:not(:has([open])) [data-action] {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+  }
+
+  /* Responsive */
   @media screen and (max-width: 989px) {
-    .ai-hero-container-{{ ai_gen_id }} {
-      grid-template-columns: 1fr;
-      gap: 40px;
+    .section-{{ section_id }} .hero-wrapper {
+      flex-direction: column;
+      aspect-ratio: auto;
+      min-height: 600px;
     }
 
-    .ai-hero-heading-{{ ai_gen_id }} {
-      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+    .section-{{ section_id }} .details-column {
+      padding-left: 2rem;
+      width: 100%;
     }
 
-    .ai-hero-description-{{ ai_gen_id }} {
-      font-size: {{ block.settings.description_size | times: 0.9 }}px;
-    }
-
-    .ai-hero-image-wrapper-{{ ai_gen_id }} {
-      order: -1;
-      padding: 20px;
+    .section-{{ section_id }} .image-column {
+      height: 400px;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .ai-hero-section-{{ ai_gen_id }} {
-      padding: {{ block.settings.section_padding | times: 0.6 }}px 16px;
-      border-radius: {{ block.settings.border_radius | times: 0.5 }}px;
+    .section-{{ section_id }} .hero-wrapper {
+      min-height: 500px;
     }
 
-    .ai-hero-heading-{{ ai_gen_id }} {
-      font-size: {{ block.settings.heading_size | times: 0.6 }}px;
+    .section-{{ section_id }} .details-column {
+      padding-left: 1rem;
     }
 
-    .ai-hero-feature-{{ ai_gen_id }} {
-      padding: {{ block.settings.feature_padding | times: 0.8 }}px {{ block.settings.feature_padding | times: 1.2 }}px;
+    .section-{{ section_id }} summary {
+      font-size: {{ section.settings.summary_font_size | times: 0.9 }}px;
     }
   }
 {% endstyle %}
 
-<div class="ai-hero-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-  <div class="ai-hero-container-{{ ai_gen_id }}">
-    <div class="ai-hero-content-{{ ai_gen_id }}">
-      {% if block.settings.heading != blank %}
-        <h1 class="ai-hero-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
-      {% endif %}
+<div class="section-{{ section_id }}" {{ section.shopify_attributes }}>
+  <div class="hero-wrapper" id="hero-{{ section_id }}">
+    <div class="details-column">
+      {% for i in (1..6) %}
+        {% liquid
+          assign feature_enabled_key = 'feature_' | append: i | append: '_enabled'
+          assign feature_title_key = 'feature_' | append: i | append: '_title'
+          assign feature_content_key = 'feature_' | append: i | append: '_content'
+          assign feature_enabled = section.settings[feature_enabled_key]
+          assign feature_title = section.settings[feature_title_key]
+          assign feature_content = section.settings[feature_content_key]
+        %}
 
-      {% if block.settings.description != blank %}
-        <div class="ai-hero-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
-      {% endif %}
-
-      <div class="ai-hero-features-{{ ai_gen_id }}">
-        {% for i in (1..5) %}
-          {% liquid
-            assign feature_enabled_key = 'feature_' | append: i | append: '_enabled'
-            assign feature_text_key = 'feature_' | append: i | append: '_text'
-            assign feature_enabled = block.settings[feature_enabled_key]
-            assign feature_text = block.settings[feature_text_key]
-          %}
-
-          {% if feature_enabled and feature_text != blank %}
-            <div class="ai-hero-feature-{{ ai_gen_id }}">
-              <div class="ai-hero-feature-icon-{{ ai_gen_id }}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </div>
-              <p class="ai-hero-feature-text-{{ ai_gen_id }}">{{ feature_text }}</p>
+        {% if feature_enabled and feature_title != blank %}
+          <details name="feature-{{ section_id }}">
+            <summary>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <span>{{ feature_title }}</span>
+            </summary>
+            <div class="details-content">
+              {{ feature_content }}
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+          </details>
+        {% endif %}
+      {% endfor %}
     </div>
 
-    <div class="ai-hero-image-wrapper-{{ ai_gen_id }}">
-      {% if block.settings.product_image %}
-        <img
-          src="{{ block.settings.product_image | image_url: width: 1000 }}"
-          alt="{{ block.settings.product_image.alt | escape }}"
-          loading="lazy"
-          width="{{ block.settings.product_image.width }}"
-          height="{{ block.settings.product_image.height }}"
-          class="ai-hero-image-{{ ai_gen_id }}"
-        >
-      {% else %}
-        <div class="ai-hero-image-placeholder-{{ ai_gen_id }}">
-          {{ 'product-1' | placeholder_svg_tag }}
-          <div class="ai-hero-empty-state-{{ ai_gen_id }}">
-            Add your product image
+    <div class="image-column">
+      {% if section.settings.default_image %}
+        <div class="img-block">
+          <div class="img-wrapper">
+            <img
+              src="{{ section.settings.default_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.default_image.alt | escape }}"
+              loading="lazy"
+            >
           </div>
         </div>
       {% endif %}
+
+      {% for i in (1..6) %}
+        {% liquid
+          assign feature_enabled_key = 'feature_' | append: i | append: '_enabled'
+          assign feature_image_key = 'feature_' | append: i | append: '_image'
+          assign feature_enabled = section.settings[feature_enabled_key]
+          assign feature_image = section.settings[feature_image_key]
+        %}
+
+        {% if feature_enabled and feature_image %}
+          <div class="img-block">
+            <div class="img-wrapper">
+              <img
+                src="{{ feature_image | image_url: width: 1200 }}"
+                alt="{{ feature_image.alt | escape }}"
+                loading="lazy"
+              >
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
+
+    <button aria-label="Next feature" data-action="next">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+      </svg>
+    </button>
+    <button aria-label="Previous feature" data-action="previous">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+      </svg>
+    </button>
+    <button aria-label="Close" data-action="exit">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </button>
   </div>
 </div>
 
+<script>
+  (function() {
+    const section = document.getElementById('hero-{{ section_id }}');
+    const detailsElements = section.querySelectorAll('details[name="feature-{{ section_id }}"]');
+    const nextButton = section.querySelector('[data-action="next"]');
+    const previousButton = section.querySelector('[data-action="previous"]');
+    const exitButton = section.querySelector('[data-action="exit"]');
+
+    const getOpenDetails = () => {
+      return Array.from(detailsElements).findIndex(details => details.open);
+    };
+
+    nextButton?.addEventListener('click', () => {
+      const currentIndex = getOpenDetails();
+      if (currentIndex !== -1) {
+        detailsElements[currentIndex].open = false;
+        const nextIndex = (currentIndex + 1) % detailsElements.length;
+        detailsElements[nextIndex].open = true;
+      }
+    });
+
+    previousButton?.addEventListener('click', () => {
+      const currentIndex = getOpenDetails();
+      if (currentIndex !== -1) {
+        detailsElements[currentIndex].open = false;
+        const previousIndex = (currentIndex - 1 + detailsElements.length) % detailsElements.length;
+        detailsElements[previousIndex].open = true;
+      }
+    });
+
+    exitButton?.addEventListener('click', () => {
+      const currentIndex = getOpenDetails();
+      if (currentIndex !== -1) {
+        detailsElements[currentIndex].open = false;
+      }
+    });
+  })();
+</script>
+
 {% schema %}
 {
-  "name": "Premium product hero",
+  "name": "Interactive Details Hero",
   "settings": [
     {
       "type": "header",
@@ -249,22 +448,32 @@
     {
       "type": "range",
       "id": "max_width",
-      "min": 800,
+      "min": 600,
       "max": 1400,
       "step": 50,
       "unit": "px",
       "label": "Maximum width",
-      "default": 1200
+      "default": 800
     },
     {
       "type": "range",
-      "id": "section_padding",
-      "min": 20,
-      "max": 100,
-      "step": 5,
+      "id": "min_height",
+      "min": 400,
+      "max": 800,
+      "step": 50,
       "unit": "px",
-      "label": "Section padding",
-      "default": 60
+      "label": "Minimum height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "section_margin",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Section margin",
+      "default": 40
     },
     {
       "type": "range",
@@ -274,17 +483,27 @@
       "step": 2,
       "unit": "px",
       "label": "Border radius",
-      "default": 24
+      "default": 16
     },
     {
       "type": "range",
-      "id": "content_spacing",
-      "min": 10,
-      "max": 50,
+      "id": "details_width",
+      "min": 250,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Details panel width",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "button_height",
+      "min": 40,
+      "max": 80,
       "step": 2,
       "unit": "px",
-      "label": "Content spacing",
-      "default": 24
+      "label": "Button height",
+      "default": 56
     },
     {
       "type": "header",
@@ -298,242 +517,83 @@
     },
     {
       "type": "color",
-      "id": "heading_color",
-      "label": "Heading",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "rgba(10, 10, 10, 0.75)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "rgba(40, 40, 40, 0.75)"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
       "default": "#ffffff"
     },
     {
       "type": "color",
-      "id": "description_color",
-      "label": "Description",
-      "default": "#e0e0e0"
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#4a9eff"
     },
     {
       "type": "header",
-      "content": "Content"
-    },
-    {
-      "type": "richtext",
-      "id": "heading",
-      "label": "Heading",
-      "default": "<p>Next-Gen Innovation</p>"
+      "content": "Typography"
     },
     {
       "type": "range",
-      "id": "heading_size",
-      "min": 24,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Heading size",
-      "default": 56
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
-      "default": "<p>Experience the future of technology with cutting-edge features designed for modern life.</p>"
-    },
-    {
-      "type": "range",
-      "id": "description_size",
-      "min": 12,
+      "id": "summary_font_size",
+      "min": 14,
       "max": 24,
       "step": 1,
       "unit": "px",
-      "label": "Description size",
-      "default": 18
-    },
-    {
-      "type": "header",
-      "content": "Product image"
-    },
-    {
-      "type": "image_picker",
-      "id": "product_image",
-      "label": "Image"
-    },
-    {
-      "type": "range",
-      "id": "image_shadow_x",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "label": "Shadow horizontal offset",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_shadow_y",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "label": "Shadow vertical offset",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "image_shadow_blur",
-      "min": 10,
-      "max": 80,
-      "step": 5,
-      "unit": "px",
-      "label": "Shadow blur",
-      "default": 40
-    },
-    {
-      "type": "color",
-      "id": "image_shadow_color",
-      "label": "Shadow color",
-      "default": "rgba(0, 0, 0, 0.3)"
-    },
-    {
-      "type": "color",
-      "id": "placeholder_gradient_start",
-      "label": "Placeholder gradient start",
-      "default": "#1a1a1a"
-    },
-    {
-      "type": "color",
-      "id": "placeholder_gradient_end",
-      "label": "Placeholder gradient end",
-      "default": "#2d2d2d"
-    },
-    {
-      "type": "header",
-      "content": "Feature buttons"
-    },
-    {
-      "type": "range",
-      "id": "feature_spacing",
-      "min": 8,
-      "max": 30,
-      "step": 2,
-      "unit": "px",
-      "label": "Spacing between features",
+      "label": "Summary font size",
       "default": 16
     },
     {
       "type": "range",
-      "id": "feature_padding",
-      "min": 10,
-      "max": 30,
-      "step": 2,
-      "unit": "px",
-      "label": "Feature padding",
-      "default": 18
-    },
-    {
-      "type": "range",
-      "id": "feature_border_radius",
-      "min": 20,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Feature border radius",
-      "default": 40
-    },
-    {
-      "type": "color",
-      "id": "feature_bg_color",
-      "label": "Feature background",
-      "default": "#1a1a1a"
-    },
-    {
-      "type": "color",
-      "id": "feature_hover_bg_color",
-      "label": "Feature hover background",
-      "default": "#252525"
-    },
-    {
-      "type": "color",
-      "id": "feature_border_color",
-      "label": "Feature border",
-      "default": "#2d2d2d"
-    },
-    {
-      "type": "color",
-      "id": "feature_text_color",
-      "label": "Feature text",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "feature_text_size",
+      "id": "content_font_size",
       "min": 12,
       "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Feature text size",
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Feature icons"
-    },
-    {
-      "type": "range",
-      "id": "icon_size",
-      "min": 30,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "label": "Icon container size",
-      "default": 44
-    },
-    {
-      "type": "color",
-      "id": "icon_bg_color",
-      "label": "Icon background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "icon_color",
-      "label": "Icon color",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
-      "content": "Shadow"
-    },
-    {
-      "type": "range",
-      "id": "shadow_x",
-      "min": 0,
-      "max": 10,
-      "step": 1,
-      "unit": "px",
-      "label": "Horizontal offset",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "shadow_y",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "label": "Vertical offset",
-      "default": 4
-    },
-    {
-      "type": "range",
-      "id": "shadow_blur",
-      "min": 5,
-      "max": 40,
-      "step": 5,
-      "unit": "px",
-      "label": "Blur",
+      "label": "Content font size",
       "default": 15
     },
     {
-      "type": "color",
-      "id": "shadow_color",
-      "label": "Shadow color",
-      "default": "rgba(0, 0, 0, 0.2)"
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 0.2,
+      "max": 1.0,
+      "step": 0.1,
+      "label": "Animation speed",
+      "default": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Default Image"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shown when no details are open"
+    },
+    {
+      "type": "image_picker",
+      "id": "default_image",
+      "label": "Default image"
     },
     {
       "type": "header",
@@ -547,9 +607,20 @@
     },
     {
       "type": "text",
-      "id": "feature_1_text",
-      "label": "Text",
-      "default": "Advanced AI Processing"
+      "id": "feature_1_title",
+      "label": "Title",
+      "default": "Details & Summary"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_content",
+      "label": "Content",
+      "default": "<p>A built-in web platform disclosure, accessible by default — no JavaScript required.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_image",
+      "label": "Feature image"
     },
     {
       "type": "header",
@@ -563,9 +634,20 @@
     },
     {
       "type": "text",
-      "id": "feature_2_text",
-      "label": "Text",
-      "default": "Ultra-Fast Performance"
+      "id": "feature_2_title",
+      "label": "Title",
+      "default": "Smooth Height"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_content",
+      "label": "Content",
+      "default": "<p>Create smooth auto-to-open transitions on height with modern CSS.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_image",
+      "label": "Feature image"
     },
     {
       "type": "header",
@@ -579,9 +661,20 @@
     },
     {
       "type": "text",
-      "id": "feature_3_text",
-      "label": "Text",
-      "default": "Premium Build Quality"
+      "id": "feature_3_title",
+      "label": "Title",
+      "default": "Timings"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_content",
+      "label": "Content",
+      "default": "<p>Customize the animation timings to get that perfect bounce effect.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_image",
+      "label": "Feature image"
     },
     {
       "type": "header",
@@ -595,9 +688,20 @@
     },
     {
       "type": "text",
-      "id": "feature_4_text",
-      "label": "Text",
-      "default": "All-Day Battery Life"
+      "id": "feature_4_title",
+      "label": "Title",
+      "default": "Progressive"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_content",
+      "label": "Content",
+      "default": "<p>Start with plain markup and progressively enhance with animations.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_image",
+      "label": "Feature image"
     },
     {
       "type": "header",
@@ -611,14 +715,52 @@
     },
     {
       "type": "text",
-      "id": "feature_5_text",
-      "label": "Text",
-      "default": "5G Connectivity"
+      "id": "feature_5_title",
+      "label": "Title",
+      "default": "Follow for more"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_5_content",
+      "label": "Content",
+      "default": "<p>Discover more creative web experiments and tutorials.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_5_image",
+      "label": "Feature image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_6_enabled",
+      "label": "Enable feature 6",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "feature_6_title",
+      "label": "Title",
+      "default": "Extra Feature"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_6_content",
+      "label": "Content",
+      "default": "<p>Add your custom content here.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_6_image",
+      "label": "Feature image"
     }
   ],
   "presets": [
     {
-      "name": "Premium product hero"
+      "name": "Interactive Details Hero"
     }
   ]
 }
