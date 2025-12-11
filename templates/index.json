@@ -274,7 +274,7 @@
             "background_color": "#ffffff",
             "placeholder_color": "#fce4ec",
             "image_width": 120,
-            "image_height": 80,
+            "image_height": 100,
             "border_width": 1,
             "border_color": "#e0e0e0",
             "hover_border_color": "#cccccc",
