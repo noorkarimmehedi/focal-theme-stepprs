@@ -1,0 +1,417 @@
+{% comment %}
+  Scrolling Product Grid Section
+  Add this to your Shopify theme's sections folder
+{% endcomment %}
+
+<style>
+  .scroll-section-{{ section.id }} {
+    --gutter: 2rem;
+    --gap: clamp(10px, 7.35vw, 80px);
+    overflow: clip;
+    background: {{ section.settings.background_color }};
+  }
+
+  @media (max-width: 600px) {
+    .scroll-section-{{ section.id }} {
+      --gutter: 1rem;
+    }
+  }
+
+  .scroll-header-{{ section.id }} {
+    min-height: 100vh;
+    display: grid;
+    align-content: center;
+    max-width: calc(100% - (2 * var(--gutter)));
+    padding-left: 48px;
+    text-align: left;
+    margin: 0 auto;
+  }
+
+  .scroll-header-{{ section.id }} h1 {
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 0.9;
+    font-weight: 700;
+    margin: 0;
+    color: {{ section.settings.text_color }};
+  }
+
+  .scroll-main-{{ section.id }} {
+    min-height: 240vh;
+    position: relative;
+  }
+
+  .scroll-content-{{ section.id }} {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    place-items: center;
+    align-content: center;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+  }
+
+  .scroll-grid-{{ section.id }} {
+    --offset: 0;
+    width: 1600px;
+    max-width: calc(100% - (2 * var(--gutter)));
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: var(--gap);
+    margin: 0 auto;
+    align-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+
+  @media (max-width: 600px) {
+    .scroll-grid-{{ section.id }} {
+      grid-template-columns: repeat(3, 1fr);
+      --offset: -1;
+    }
+    .scroll-grid-{{ section.id }} > div:nth-of-type(1) {
+      display: none;
+    }
+  }
+
+  .scroll-grid-{{ section.id }} > .layer {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    opacity: 0;
+    scale: 0;
+  }
+
+  .scroll-grid-{{ section.id }} > div:nth-of-type(1) div:nth-of-type(odd) {
+    grid-column: 1;
+  }
+  .scroll-grid-{{ section.id }} > div:nth-of-type(1) div:nth-of-type(even) {
+    grid-column: -2;
+  }
+  .scroll-grid-{{ section.id }} > div:nth-of-type(2) div:nth-of-type(odd) {
+    grid-column: calc(2 + var(--offset));
+  }
+  .scroll-grid-{{ section.id }} > div:nth-of-type(2) div:nth-of-type(even) {
+    grid-column: calc(-3 - var(--offset));
+  }
+  .scroll-grid-{{ section.id }} > div:nth-of-type(3) div {
+    grid-column: calc(3 + var(--offset));
+  }
+  .scroll-grid-{{ section.id }} > div:nth-of-type(3) div:last-of-type {
+    grid-row: -1;
+  }
+
+  .scroll-grid-{{ section.id }} .scaler {
+    position: relative;
+    grid-area: 2 / calc(3 + var(--offset));
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  .scroll-grid-{{ section.id }} .scaler img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    object-fit: cover;
+    border-radius: 1rem;
+    width: calc(100vw - (2 * var(--gutter)));
+    height: calc(100vh - (2 * var(--gutter)));
+  }
+
+  .scroll-grid-{{ section.id }} .layer img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 1rem;
+    display: block;
+  }
+
+  .scroll-grid-{{ section.id }} .product-card {
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .scroll-grid-{{ section.id }} .product-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    border-radius: 0 0 1rem 1rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .scroll-grid-{{ section.id }} .product-card:hover .product-info {
+    opacity: 1;
+  }
+
+  .scroll-grid-{{ section.id }} .product-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .scroll-grid-{{ section.id }} .product-price {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .scroll-footer-{{ section.id }} {
+    min-height: 50vh;
+    display: grid;
+    place-items: center;
+  }
+
+  .scroll-footer-{{ section.id }} h2 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    color: {{ section.settings.text_color }};
+  }
+</style>
+
+<div class="scroll-section-{{ section.id }}">
+  {% if section.settings.heading != blank %}
+    <header class="scroll-header-{{ section.id }}">
+      <h1>{{ section.settings.heading | escape }}</h1>
+    </header>
+  {% endif %}
+
+  <main>
+    <section class="scroll-main-{{ section.id }}">
+      <div class="scroll-content-{{ section.id }}">
+        <div class="scroll-grid-{{ section.id }}">
+          
+          {% comment %} Layer 1 - Outer products {% endcomment %}
+          <div class="layer layer-1">
+            {% for block in section.blocks limit: 6 %}
+              {% if block.type == 'product' and block.settings.product != blank %}
+                {% if forloop.index <= 6 %}
+                  <div>
+                    <a href="{{ block.settings.product.url }}" class="product-card">
+                      {% if block.settings.product.featured_image %}
+                        {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                      {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                      {% endif %}
+                      <div class="product-info">
+                        <h3 class="product-title">{{ block.settings.product.title }}</h3>
+                        <p class="product-price">{{ block.settings.product.price | money }}</p>
+                      </div>
+                    </a>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% comment %} Layer 2 - Middle products {% endcomment %}
+          <div class="layer layer-2">
+            {% for block in section.blocks offset: 6 limit: 6 %}
+              {% if block.type == 'product' and block.settings.product != blank %}
+                <div>
+                  <a href="{{ block.settings.product.url }}" class="product-card">
+                    {% if block.settings.product.featured_image %}
+                      {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                    {% else %}
+                      {{ 'product-2' | placeholder_svg_tag: 'placeholder-svg' }}
+                    {% endif %}
+                    <div class="product-info">
+                      <h3 class="product-title">{{ block.settings.product.title }}</h3>
+                      <p class="product-price">{{ block.settings.product.price | money }}</p>
+                    </div>
+                  </a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% comment %} Layer 3 - Inner products {% endcomment %}
+          <div class="layer layer-3">
+            {% for block in section.blocks offset: 12 limit: 2 %}
+              {% if block.type == 'product' and block.settings.product != blank %}
+                <div>
+                  <a href="{{ block.settings.product.url }}" class="product-card">
+                    {% if block.settings.product.featured_image %}
+                      {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                    {% else %}
+                      {{ 'product-3' | placeholder_svg_tag: 'placeholder-svg' }}
+                    {% endif %}
+                    <div class="product-info">
+                      <h3 class="product-title">{{ block.settings.product.title }}</h3>
+                      <p class="product-price">{{ block.settings.product.price | money }}</p>
+                    </div>
+                  </a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% comment %} Center featured product {% endcomment %}
+          <div class="scaler">
+            {% if section.settings.featured_product != blank %}
+              <a href="{{ section.settings.featured_product.url }}">
+                {% if section.settings.featured_product.featured_image %}
+                  {{ section.settings.featured_product.featured_image | image_url: width: 1200 | image_tag }}
+                {% else %}
+                  {{ 'product-4' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </a>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {% if section.settings.footer_text != blank %}
+      <section class="scroll-footer-{{ section.id }}">
+        <h2>{{ section.settings.footer_text | escape }}</h2>
+      </section>
+    {% endif %}
+  </main>
+</div>
+
+<script>
+(function() {
+  const section = document.querySelector('.scroll-main-{{ section.id }}');
+  const scaler = document.querySelector('.scroll-grid-{{ section.id }} .scaler img');
+  const layers = document.querySelectorAll('.scroll-grid-{{ section.id }} .layer');
+  
+  // Check for scroll-driven animations support
+  const hasScrollSupport = CSS.supports('(animation-timeline: scroll())');
+  
+  if (!hasScrollSupport) {
+    // Fallback: Use Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const progress = Math.max(0, Math.min(1, entry.intersectionRatio));
+        
+        if (scaler) {
+          const startWidth = window.innerWidth - 64;
+          const endWidth = scaler.parentElement.offsetWidth;
+          const startHeight = window.innerHeight - 64;
+          const endHeight = scaler.parentElement.offsetHeight;
+          
+          scaler.style.width = `${startWidth - (startWidth - endWidth) * progress}px`;
+          scaler.style.height = `${startHeight - (startHeight - endHeight) * progress}px`;
+        }
+        
+        layers.forEach((layer, i) => {
+          const delay = i * 0.1;
+          const layerProgress = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
+          layer.style.opacity = layerProgress;
+          layer.style.scale = layerProgress;
+        });
+      });
+    }, {
+      threshold: Array.from({ length: 100 }, (_, i) => i / 100)
+    });
+    
+    observer.observe(section);
+  } else {
+    // Use CSS scroll-driven animations
+    section.style.viewTimeline = '--runner';
+    
+    if (scaler) {
+      scaler.style.animation = 'scale-products both';
+      scaler.style.animationTimeline = '--runner';
+      scaler.style.animationRange = 'entry 100% exit -20%';
+    }
+    
+    layers.forEach((layer, i) => {
+      layer.style.animation = 'reveal-layer both';
+      layer.style.animationTimeline = '--runner';
+      layer.style.animationRange = `entry 100% exit ${-10 * i}%`;
+    });
+    
+    // Add keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes scale-products {
+        0%, 10% {
+          width: calc(100vw - 4rem);
+          height: calc(100vh - 4rem);
+        }
+      }
+      @keyframes reveal-layer {
+        0%, 30% {
+          opacity: 0;
+          scale: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Scrolling Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover Our Collection"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured Product (Center)",
+      "info": "This product will appear in the center and scale as you scroll"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "limit": 14,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Product Grid",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
