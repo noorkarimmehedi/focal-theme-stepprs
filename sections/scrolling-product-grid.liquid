@@ -1,43 +1,72 @@
 {% comment %}
-  Scrolling Product Grid Section
+  Scrolling Product Grid Section - Exact replica with collection support
   Add this to your Shopify theme's sections folder
 {% endcomment %}
 
 <style>
-  .scroll-section-{{ section.id }} {
-    --gutter: 2rem;
-    --gap: clamp(10px, 7.35vw, 80px);
-    overflow: clip;
-    background: {{ section.settings.background_color }};
+  /* Base Variables */
+  :root {
+    --scroll-gutter: 2rem;
+    --scroll-gap: clamp(10px, 7.35vw, 80px);
   }
 
   @media (max-width: 600px) {
-    .scroll-section-{{ section.id }} {
-      --gutter: 1rem;
+    :root {
+      --scroll-gutter: 1rem;
     }
   }
 
+  /* Main Container */
+  .scroll-section-{{ section.id }} {
+    overflow: clip;
+    background: {{ section.settings.background_color }};
+    position: relative;
+  }
+
+  /* Grid Background Pattern */
+  .scroll-section-{{ section.id }}::before {
+    --size: 45px;
+    --line: color-mix(in lch, {{ section.settings.text_color }}, transparent 70%);
+    content: '';
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background: 
+      linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
+      linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+    mask: linear-gradient(-20deg, transparent 50%, white);
+    top: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header Section */
   .scroll-header-{{ section.id }} {
     min-height: 100vh;
     display: grid;
     align-content: center;
-    max-width: calc(100% - (2 * var(--gutter)));
+    max-width: calc(100% - (2 * var(--scroll-gutter)));
     padding-left: 48px;
     text-align: left;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
 
   .scroll-header-{{ section.id }} h1 {
     font-size: clamp(3rem, 10vw, 8rem);
-    line-height: 0.9;
+    line-height: 0.6;
     font-weight: 700;
     margin: 0;
     color: {{ section.settings.text_color }};
+    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif, system-ui;
   }
 
+  /* Main Scrolling Section */
   .scroll-main-{{ section.id }} {
     min-height: 240vh;
     position: relative;
+    z-index: 1;
   }
 
   .scroll-content-{{ section.id }} {
@@ -51,14 +80,15 @@
     overflow: hidden;
   }
 
+  /* Grid Layout */
   .scroll-grid-{{ section.id }} {
     --offset: 0;
     width: 1600px;
-    max-width: calc(100% - (2 * var(--gutter)));
+    max-width: calc(100% - (2 * var(--scroll-gutter)));
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(3, auto);
-    gap: var(--gap);
+    gap: var(--scroll-gap);
     margin: 0 auto;
     align-content: center;
     position: absolute;
@@ -72,40 +102,41 @@
       grid-template-columns: repeat(3, 1fr);
       --offset: -1;
     }
-    .scroll-grid-{{ section.id }} > div:nth-of-type(1) {
+    .scroll-grid-{{ section.id }} > .layer:nth-of-type(1) {
       display: none;
     }
   }
 
+  /* Layers */
   .scroll-grid-{{ section.id }} > .layer {
     display: grid;
     grid-column: 1 / -1;
     grid-row: 1 / -1;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
-    opacity: 0;
-    scale: 0;
   }
 
-  .scroll-grid-{{ section.id }} > div:nth-of-type(1) div:nth-of-type(odd) {
+  /* Layer positioning */
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(1) div:nth-of-type(odd) {
     grid-column: 1;
   }
-  .scroll-grid-{{ section.id }} > div:nth-of-type(1) div:nth-of-type(even) {
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(1) div:nth-of-type(even) {
     grid-column: -2;
   }
-  .scroll-grid-{{ section.id }} > div:nth-of-type(2) div:nth-of-type(odd) {
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(2) div:nth-of-type(odd) {
     grid-column: calc(2 + var(--offset));
   }
-  .scroll-grid-{{ section.id }} > div:nth-of-type(2) div:nth-of-type(even) {
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(2) div:nth-of-type(even) {
     grid-column: calc(-3 - var(--offset));
   }
-  .scroll-grid-{{ section.id }} > div:nth-of-type(3) div {
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(3) div {
     grid-column: calc(3 + var(--offset));
   }
-  .scroll-grid-{{ section.id }} > div:nth-of-type(3) div:last-of-type {
+  .scroll-grid-{{ section.id }} > .layer:nth-of-type(3) div:last-of-type {
     grid-row: -1;
   }
 
+  /* Center Scaler */
   .scroll-grid-{{ section.id }} .scaler {
     position: relative;
     grid-area: 2 / calc(3 + var(--offset));
@@ -121,10 +152,11 @@
     translate: -50% -50%;
     object-fit: cover;
     border-radius: 1rem;
-    width: calc(100vw - (2 * var(--gutter)));
-    height: calc(100vh - (2 * var(--gutter)));
+    width: 100%;
+    height: 100%;
   }
 
+  /* Product Images */
   .scroll-grid-{{ section.id }} .layer img {
     width: 100%;
     aspect-ratio: 4 / 5;
@@ -133,59 +165,96 @@
     display: block;
   }
 
-  .scroll-grid-{{ section.id }} .product-card {
-    position: relative;
-    cursor: pointer;
+  .scroll-grid-{{ section.id }} .product-link {
+    display: block;
     text-decoration: none;
     color: inherit;
-    display: block;
+    position: relative;
   }
 
-  .scroll-grid-{{ section.id }} .product-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    border-radius: 0 0 1rem 1rem;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .scroll-grid-{{ section.id }} .product-card:hover .product-info {
-    opacity: 1;
-  }
-
-  .scroll-grid-{{ section.id }} .product-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 0 0 0.25rem 0;
-  }
-
-  .scroll-grid-{{ section.id }} .product-price {
-    font-size: 0.85rem;
-    margin: 0;
-  }
-
+  /* Footer Section */
   .scroll-footer-{{ section.id }} {
-    min-height: 50vh;
+    min-height: 100vh;
     display: grid;
     place-items: center;
+    position: relative;
+    z-index: 1;
   }
 
   .scroll-footer-{{ section.id }} h2 {
     font-size: clamp(2rem, 6vw, 4rem);
     font-weight: 700;
     color: {{ section.settings.text_color }};
+    margin: 0;
+    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif, system-ui;
+  }
+
+  /* Animation Keyframes */
+  @keyframes fade-in {
+    0%, 55% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes scale-reveal {
+    0%, 30% {
+      scale: 0;
+    }
+  }
+
+  @keyframes scale-width {
+    0%, 10% {
+      width: calc(100vw - (2 * var(--scroll-gutter)));
+    }
+  }
+
+  @keyframes scale-height {
+    0%, 10% {
+      height: calc(100vh - (2 * var(--scroll-gutter)));
+    }
+  }
+
+  /* Scroll-driven animations */
+  @supports (animation-timeline: scroll()) {
+    .scroll-main-{{ section.id }} {
+      view-timeline: --scroll-runner;
+    }
+
+    /* Center image scaling */
+    .scroll-grid-{{ section.id }} .scaler img {
+      animation: scale-width both, scale-height both;
+      animation-timeline: --scroll-runner, --scroll-runner;
+      animation-range: entry 100% exit -20%;
+      animation-timing-function: 
+        linear(0 0%, 0.0036 9.62%, 0.0185 16.66%, 0.0489 23.03%, 0.0962 28.86%, 0.1705 34.93%, 0.269 40.66%, 0.3867 45.89%, 0.5833 52.95%, 0.683 57.05%, 0.7829 62.14%, 0.8621 67.46%, 0.8991 70.68%, 0.9299 74.03%, 0.9545 77.52%, 0.9735 81.21%, 0.9865 85%, 0.9949 89.15%, 1 100%),
+        linear(0 0%, 0.0027 3.64%, 0.0106 7.29%, 0.0425 14.58%, 0.0957 21.87%, 0.1701 29.16%, 0.2477 35.19%, 0.3401 41.23%, 0.5982 55.18%, 0.7044 61.56%, 0.7987 68.28%, 0.875 75%, 0.9297 81.25%, 0.9687 87.5%, 0.9922 93.75%, 1 100%);
+    }
+
+    /* Layer animations with stagger */
+    .scroll-grid-{{ section.id }} > .layer {
+      animation: fade-in both, scale-reveal both;
+      animation-timeline: --scroll-runner, --scroll-runner;
+      animation-timing-function: 
+        linear(0 0%, 0.2861 18.47%, 0.4829 32.08%, 0.6437 44.52%, 0.7712 56.07%, 0.8722 67.47%, 0.9115 73.02%, 0.9434 78.49%, 0.9682 83.91%, 0.9859 89.3%, 0.9965 94.66%, 1 100%),
+        linear(0 0%, 0.0027 3.64%, 0.0106 7.29%, 0.0425 14.58%, 0.0957 21.87%, 0.1701 29.16%, 0.2477 35.19%, 0.3401 41.23%, 0.5982 55.18%, 0.7044 61.56%, 0.7987 68.28%, 0.875 75%, 0.9297 81.25%, 0.9687 87.5%, 0.9922 93.75%, 1 100%);
+    }
+
+    .scroll-grid-{{ section.id }} > .layer:nth-of-type(1) {
+      animation-range: entry 100% exit 0%;
+    }
+    .scroll-grid-{{ section.id }} > .layer:nth-of-type(2) {
+      animation-range: entry 100% exit -10%;
+    }
+    .scroll-grid-{{ section.id }} > .layer:nth-of-type(3) {
+      animation-range: entry 100% exit -20%;
+    }
   }
 </style>
 
 <div class="scroll-section-{{ section.id }}">
   {% if section.settings.heading != blank %}
     <header class="scroll-header-{{ section.id }}">
-      <h1>{{ section.settings.heading | escape }}</h1>
+      <h1>{{ section.settings.heading | newline_to_br }}</h1>
     </header>
   {% endif %}
 
@@ -194,69 +263,104 @@
       <div class="scroll-content-{{ section.id }}">
         <div class="scroll-grid-{{ section.id }}">
           
-          {% comment %} Layer 1 - Outer products {% endcomment %}
-          <div class="layer layer-1">
-            {% for block in section.blocks limit: 6 %}
-              {% if block.type == 'product' and block.settings.product != blank %}
-                {% if forloop.index <= 6 %}
+          {% comment %} Get products from collection or blocks {% endcomment %}
+          {% if section.settings.collection != blank %}
+            {% assign collection_products = section.settings.collection.products %}
+          {% else %}
+            {% assign collection_products = blank %}
+          {% endif %}
+
+          {% comment %} Layer 1 - Outer products (6 items) {% endcomment %}
+          <div class="layer">
+            {% if collection_products != blank %}
+              {% for product in collection_products limit: 6 %}
+                <div>
+                  <a href="{{ product.url }}" class="product-link">
+                    {% if product.featured_image %}
+                      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag }}
+                    {% endif %}
+                  </a>
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for block in section.blocks limit: 6 %}
+                {% if block.type == 'product' and block.settings.product != blank %}
                   <div>
-                    <a href="{{ block.settings.product.url }}" class="product-card">
+                    <a href="{{ block.settings.product.url }}" class="product-link">
                       {% if block.settings.product.featured_image %}
-                        {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                        <img src="{{ block.settings.product.featured_image | image_url: width: 800 }}" alt="{{ block.settings.product.title | escape }}" loading="lazy">
                       {% else %}
-                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                        {{ 'product-1' | placeholder_svg_tag }}
                       {% endif %}
-                      <div class="product-info">
-                        <h3 class="product-title">{{ block.settings.product.title }}</h3>
-                        <p class="product-price">{{ block.settings.product.price | money }}</p>
-                      </div>
                     </a>
                   </div>
                 {% endif %}
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            {% endif %}
           </div>
 
-          {% comment %} Layer 2 - Middle products {% endcomment %}
-          <div class="layer layer-2">
-            {% for block in section.blocks offset: 6 limit: 6 %}
-              {% if block.type == 'product' and block.settings.product != blank %}
+          {% comment %} Layer 2 - Middle products (6 items) {% endcomment %}
+          <div class="layer">
+            {% if collection_products != blank %}
+              {% for product in collection_products offset: 6 limit: 6 %}
                 <div>
-                  <a href="{{ block.settings.product.url }}" class="product-card">
-                    {% if block.settings.product.featured_image %}
-                      {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                  <a href="{{ product.url }}" class="product-link">
+                    {% if product.featured_image %}
+                      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy">
                     {% else %}
-                      {{ 'product-2' | placeholder_svg_tag: 'placeholder-svg' }}
+                      {{ 'product-2' | placeholder_svg_tag }}
                     {% endif %}
-                    <div class="product-info">
-                      <h3 class="product-title">{{ block.settings.product.title }}</h3>
-                      <p class="product-price">{{ block.settings.product.price | money }}</p>
-                    </div>
                   </a>
                 </div>
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              {% for block in section.blocks offset: 6 limit: 6 %}
+                {% if block.type == 'product' and block.settings.product != blank %}
+                  <div>
+                    <a href="{{ block.settings.product.url }}" class="product-link">
+                      {% if block.settings.product.featured_image %}
+                        <img src="{{ block.settings.product.featured_image | image_url: width: 800 }}" alt="{{ block.settings.product.title | escape }}" loading="lazy">
+                      {% else %}
+                        {{ 'product-2' | placeholder_svg_tag }}
+                      {% endif %}
+                    </a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
           </div>
 
-          {% comment %} Layer 3 - Inner products {% endcomment %}
-          <div class="layer layer-3">
-            {% for block in section.blocks offset: 12 limit: 2 %}
-              {% if block.type == 'product' and block.settings.product != blank %}
+          {% comment %} Layer 3 - Inner products (2 items) {% endcomment %}
+          <div class="layer">
+            {% if collection_products != blank %}
+              {% for product in collection_products offset: 12 limit: 2 %}
                 <div>
-                  <a href="{{ block.settings.product.url }}" class="product-card">
-                    {% if block.settings.product.featured_image %}
-                      {{ block.settings.product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                  <a href="{{ product.url }}" class="product-link">
+                    {% if product.featured_image %}
+                      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy">
                     {% else %}
-                      {{ 'product-3' | placeholder_svg_tag: 'placeholder-svg' }}
-                    {% endif %}
-                    <div class="product-info">
-                      <h3 class="product-title">{{ block.settings.product.title }}</h3>
-                      <p class="product-price">{{ block.settings.product.price | money }}</p>
-                    </div>
+                      {{ 'product-3' | placeholder_svg_tag }}
+                      {% endif %}
                   </a>
                 </div>
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              {% for block in section.blocks offset: 12 limit: 2 %}
+                {% if block.type == 'product' and block.settings.product != blank %}
+                  <div>
+                    <a href="{{ block.settings.product.url }}" class="product-link">
+                      {% if block.settings.product.featured_image %}
+                        <img src="{{ block.settings.product.featured_image | image_url: width: 800 }}" alt="{{ block.settings.product.title | escape }}" loading="lazy">
+                      {% else %}
+                        {{ 'product-3' | placeholder_svg_tag }}
+                      {% endif %}
+                    </a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
           </div>
 
           {% comment %} Center featured product {% endcomment %}
@@ -264,9 +368,18 @@
             {% if section.settings.featured_product != blank %}
               <a href="{{ section.settings.featured_product.url }}">
                 {% if section.settings.featured_product.featured_image %}
-                  {{ section.settings.featured_product.featured_image | image_url: width: 1200 | image_tag }}
+                  <img src="{{ section.settings.featured_product.featured_image | image_url: width: 1200 }}" alt="{{ section.settings.featured_product.title | escape }}">
                 {% else %}
-                  {{ 'product-4' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {{ 'product-4' | placeholder_svg_tag }}
+                {% endif %}
+              </a>
+            {% elsif collection_products != blank and collection_products.size > 14 %}
+              {% assign featured = collection_products[14] %}
+              <a href="{{ featured.url }}">
+                {% if featured.featured_image %}
+                  <img src="{{ featured.featured_image | image_url: width: 1200 }}" alt="{{ featured.title | escape }}">
+                {% else %}
+                  {{ 'product-4' | placeholder_svg_tag }}
                 {% endif %}
               </a>
             {% endif %}
@@ -278,7 +391,7 @@
 
     {% if section.settings.footer_text != blank %}
       <section class="scroll-footer-{{ section.id }}">
-        <h2>{{ section.settings.footer_text | escape }}</h2>
+        <h2>{{ section.settings.footer_text }}</h2>
       </section>
     {% endif %}
   </main>
@@ -286,74 +399,63 @@
 
 <script>
 (function() {
-  const section = document.querySelector('.scroll-main-{{ section.id }}');
-  const scaler = document.querySelector('.scroll-grid-{{ section.id }} .scaler img');
-  const layers = document.querySelectorAll('.scroll-grid-{{ section.id }} .layer');
-  
-  // Check for scroll-driven animations support
   const hasScrollSupport = CSS.supports('(animation-timeline: scroll())');
   
   if (!hasScrollSupport) {
-    // Fallback: Use Intersection Observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const progress = Math.max(0, Math.min(1, entry.intersectionRatio));
+    // Load GSAP for fallback
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+    script.onload = function() {
+      const scrollScript = document.createElement('script');
+      scrollScript.src = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
+      scrollScript.onload = function() {
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const section = document.querySelector('.scroll-main-{{ section.id }}');
+        const scaler = document.querySelector('.scroll-grid-{{ section.id }} .scaler img');
+        const layers = document.querySelectorAll('.scroll-grid-{{ section.id }} .layer');
         
         if (scaler) {
-          const startWidth = window.innerWidth - 64;
-          const endWidth = scaler.parentElement.offsetWidth;
-          const startHeight = window.innerHeight - 64;
-          const endHeight = scaler.parentElement.offsetHeight;
-          
-          scaler.style.width = `${startWidth - (startWidth - endWidth) * progress}px`;
-          scaler.style.height = `${startHeight - (startHeight - endHeight) * progress}px`;
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top -10%',
+              end: 'bottom 80%',
+              scrub: true,
+            }
+          })
+          .from(scaler, {
+            width: window.innerWidth - 64,
+            ease: 'power2.out',
+          }, 0)
+          .from(scaler, {
+            height: window.innerHeight - 64,
+            ease: 'power1.out',
+          }, 0);
         }
         
-        layers.forEach((layer, i) => {
-          const delay = i * 0.1;
-          const layerProgress = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
-          layer.style.opacity = layerProgress;
-          layer.style.scale = layerProgress;
-        });
-      });
-    }, {
-      threshold: Array.from({ length: 100 }, (_, i) => i / 100)
-    });
-    
-    observer.observe(section);
-  } else {
-    // Use CSS scroll-driven animations
-    section.style.viewTimeline = '--runner';
-    
-    if (scaler) {
-      scaler.style.animation = 'scale-products both';
-      scaler.style.animationTimeline = '--runner';
-      scaler.style.animationRange = 'entry 100% exit -20%';
-    }
-    
-    layers.forEach((layer, i) => {
-      layer.style.animation = 'reveal-layer both';
-      layer.style.animationTimeline = '--runner';
-      layer.style.animationRange = `entry 100% exit ${-10 * i}%`;
-    });
-    
-    // Add keyframes
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes scale-products {
-        0%, 10% {
-          width: calc(100vw - 4rem);
-          height: calc(100vh - 4rem);
+        if (layers.length) {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top -40%',
+              end: 'bottom bottom',
+              scrub: true,
+            }
+          });
+          
+          layers.forEach((layer, i) => {
+            tl.from(layer, {
+              opacity: 0,
+              scale: 0,
+              ease: i === 0 ? 'power1.out' : i === 1 ? 'power3.out' : 'power4.out',
+            }, 0);
+          });
         }
-      }
-      @keyframes reveal-layer {
-        0%, 30% {
-          opacity: 0;
-          scale: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
+      };
+      document.head.appendChild(scrollScript);
+    };
+    document.head.appendChild(script);
   }
 })();
 </script>
@@ -363,22 +465,28 @@
   "name": "Scrolling Product Grid",
   "settings": [
     {
-      "type": "text",
+      "type": "richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Discover Our Collection"
+      "default": "<p>let's<br/>scroll.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select a collection to automatically populate products. Requires at least 14 products. If empty, use individual product blocks below."
     },
     {
       "type": "product",
       "id": "featured_product",
       "label": "Featured Product (Center)",
-      "info": "This product will appear in the center and scale as you scroll"
+      "info": "This product appears in the center and scales as you scroll. If empty and using a collection, the 15th product will be used."
     },
     {
       "type": "text",
       "id": "footer_text",
       "label": "Footer Text",
-      "default": "Shop Now"
+      "default": "fin."
     },
     {
       "type": "color",
@@ -402,15 +510,15 @@
         {
           "type": "product",
           "id": "product",
-          "label": "Product"
+          "label": "Product",
+          "info": "Only used if no collection is selected above"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Scrolling Product Grid",
-      "blocks": []
+      "name": "Scrolling Product Grid"
     }
   ]
 }
