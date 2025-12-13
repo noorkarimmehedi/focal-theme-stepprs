@@ -300,7 +300,7 @@
       "settings": {
         "section_title": "Featured Content",
         "title_font": "baskervville_n4",
-        "title_size": 42,
+        "title_size": 28,
         "title_color": "#000000",
         "background_color": "#ffffff",
         "padding_top": 4,
@@ -309,7 +309,8 @@
         "padding_right": 16,
         "card_background": "#ffffff",
         "card_border_color": "#e5e7eb",
-        "card_radius": 4
+        "card_radius": 4,
+        "card_gap": 16
       }
     },
     "scrolling_product_grid_EeEjBE": {
