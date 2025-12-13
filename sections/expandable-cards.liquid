@@ -37,7 +37,9 @@
   @media (max-width: 768px) {
     .expandable-cards-container {
       justify-content: flex-start;
-      scroll-padding-left: 20%;
+      scroll-padding: 0 calc(50% - 100px);
+      padding-left: calc(50% - 100px);
+      padding-right: calc(50% - 100px);
     }
   }
 
@@ -60,7 +62,7 @@
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                 transform 0.3s ease,
                 opacity 0.3s ease;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     transform-origin: center center;
   }
 
@@ -359,9 +361,14 @@
 
     // Center scroll on load for mobile only
     if (container && window.innerWidth <= 768) {
-      const scrollWidth = container.scrollWidth;
-      const clientWidth = container.clientWidth;
-      container.scrollLeft = (scrollWidth - clientWidth) / 2;
+      // Scroll to first card centered
+      if (cards.length > 0) {
+        cards[0].scrollIntoView({
+          behavior: 'auto',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
     }
     
     updateCardScales();
