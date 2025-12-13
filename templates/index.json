@@ -294,7 +294,16 @@
         "card_xgdpFT"
       ],
       "name": "Expandable Cards",
-      "settings": {}
+      "settings": {
+        "section_title": "Featured Content",
+        "title_font": "sans_serif_n4",
+        "title_size": 42,
+        "title_color": "#000000",
+        "background_color": "#ffffff",
+        "card_background": "#ffffff",
+        "card_border_color": "#e5e7eb",
+        "card_radius": 8
+      }
     },
     "scrolling_product_grid_EeEjBE": {
       "type": "scrolling-product-grid",
