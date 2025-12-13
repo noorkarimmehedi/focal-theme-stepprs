@@ -8,7 +8,6 @@
     width: 100%;
     padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
     background-color: {{ section.settings.background_color }};
-    position: relative;
   }
 
   .expandable-cards-section-{{ section.id }} .section-title {
@@ -267,51 +266,6 @@
     color: #6b7280;
     margin: 0;
   }
-
-  .carousel-navigation {
-    display: flex !important;
-    position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    gap: 0.75rem;
-    z-index: 9999;
-  }
-
-  @media (min-width: 769px) {
-    .carousel-navigation {
-      display: none !important;
-    }
-  }
-
-  .nav-arrow {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-
-  .nav-arrow:active {
-    transform: scale(0.95);
-  }
-
-  .nav-arrow:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  .nav-arrow svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: white;
-  }
 </style>
 
 <div class="expandable-cards-section-{{ section.id }}">
@@ -393,17 +347,6 @@
         </div>
       </div>
     {% endfor %}
-    <div class="carousel-navigation" id="carousel-nav-{{ section.id }}">
-      <button class="nav-arrow" id="prev-arrow-{{ section.id }}" type="button" aria-label="Previous card">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      <button class="nav-arrow" id="next-arrow-{{ section.id }}" type="button" aria-label="Next card">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
     </div>
   </div>
 </div>
@@ -412,10 +355,7 @@
   (function() {
     const container = document.getElementById('expandable-cards-{{ section.id }}');
     const cards = container.querySelectorAll('.expandable-card');
-    const prevArrow = document.getElementById('prev-arrow-{{ section.id }}');
-    const nextArrow = document.getElementById('next-arrow-{{ section.id }}');
     let selectedCard = null;
-    let currentIndex = 0;
 
     // Center scroll on load for mobile only
     if (container && window.innerWidth <= 768) {
@@ -425,7 +365,6 @@
     }
     
     updateCardScales();
-    updateArrowStates();
 
     // Function to update card scales based on position
     function updateCardScales() {
@@ -441,47 +380,10 @@
         if (distanceFromCenter < 150) {
           card.classList.add('center-card');
           card.classList.remove('side-card');
-          currentIndex = index;
         } else {
           card.classList.add('side-card');
           card.classList.remove('center-card');
         }
-      });
-      
-      updateArrowStates();
-    }
-
-    // Function to update arrow button states
-    function updateArrowStates() {
-      if (prevArrow && nextArrow) {
-        prevArrow.disabled = currentIndex === 0;
-        nextArrow.disabled = currentIndex === cards.length - 1;
-      }
-    }
-
-    // Function to scroll to a specific card
-    function scrollToCard(index) {
-      if (index >= 0 && index < cards.length) {
-        cards[index].scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-        currentIndex = index;
-        updateArrowStates();
-      }
-    }
-
-    // Arrow button click handlers
-    if (prevArrow) {
-      prevArrow.addEventListener('click', function() {
-        scrollToCard(currentIndex - 1);
-      });
-    }
-
-    if (nextArrow) {
-      nextArrow.addEventListener('click', function() {
-        scrollToCard(currentIndex + 1);
       });
     }
 
