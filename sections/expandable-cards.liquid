@@ -268,7 +268,7 @@
   }
 
   .carousel-navigation {
-    display: none;
+    display: flex;
     position: fixed;
     bottom: 2rem;
     right: 2rem;
@@ -276,9 +276,9 @@
     z-index: 100;
   }
 
-  @media (max-width: 768px) {
+  @media (min-width: 769px) {
     .carousel-navigation {
-      display: flex;
+      display: none;
     }
   }
 
