@@ -1,7 +1,7 @@
-{% doc %}
+{% comment %}
   @prompt
-    Design a clean e-commerce product grid with a 2×2 layout. Each card has a white background, thin black borders, and centered product images. Add a red ‘HOLIDAY SPECIAL’ ribbon on top cards. Show product name, subtitle, price aligned right, and a small plus icon for quick add. Minimal, editorial sneaker-store style., vendor name should't be visible also in desktop version there should be 4 products per row and product image should fit in both mobile and desktop version, in desktop version there shouldn't be any gap on left and right side., in both mobile and desktop the product image isn't fully fit the product image container , add product title and price font picker and size adjustment. also add countdown ribbon, on mobile version there is a gap on left side of product title and price reduce that gap a little bit on both left and right side 
-{% enddoc %}
+    Design a clean e-commerce product grid with a 2×2 layout. Each card has a white background, thin black borders, and centered product images. Add a red 'HOLIDAY SPECIAL' ribbon on top cards. Show product name, subtitle, price aligned right, and a small plus icon for quick add. Minimal, editorial sneaker-store style., vendor name should't be visible also in desktop version there should be 4 products per row and product image should fit in both mobile and desktop version, in desktop version there shouldn't be any gap on left and right side., in both mobile and desktop the product image isn't fully fit the product image container , add product title and price font picker and size adjustment. also add countdown ribbon, on mobile version there is a gap on left side of product title and price reduce that gap a little bit on both left and right side 
+{% endcomment %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
@@ -149,11 +149,25 @@
     border-color: {{ block.settings.button_hover_border }};
   }
 
+  .ai-product-card__add-button-{{ ai_gen_id }}.adding {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .ai-product-card__add-button-{{ ai_gen_id }}.added {
+    background-color: #4caf50;
+    border-color: #4caf50;
+  }
+
   .ai-product-card__add-icon-{{ ai_gen_id }} {
     width: {{ block.settings.icon_size }}px;
     height: {{ block.settings.icon_size }}px;
     stroke: {{ block.settings.text_color }};
     stroke-width: 2;
+  }
+
+  .ai-product-card__add-button-{{ ai_gen_id }}.added .ai-product-card__add-icon-{{ ai_gen_id }} {
+    stroke: #ffffff;
   }
 
   .ai-product-card__link-{{ ai_gen_id }} {
@@ -265,7 +279,7 @@
             <button
               class="ai-product-card__add-button-{{ ai_gen_id }}"
               aria-label="Quick add to cart"
-              data-product-id="{% if product %}{{ product.id }}{% endif %}"
+              data-product-id="{% if product %}{{ product.variants.first.id }}{% endif %}"
             >
               <svg class="ai-product-card__add-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round"/>
@@ -305,35 +319,91 @@
         this.addButtons.forEach((button) => {
           button.addEventListener('click', (event) => {
             event.preventDefault();
-            const productId = button.getAttribute('data-product-id');
+            event.stopPropagation();
             
-            if (!productId) {
+            const variantId = button.getAttribute('data-product-id');
+            
+            if (!variantId) {
+              console.error('No variant ID found');
               return;
             }
 
-            button.style.opacity = '0.5';
-            button.style.pointerEvents = 'none';
+            // Disable button and show loading state
+            button.classList.add('adding');
 
+            // Add product to cart
             fetch('/cart/add.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                id: productId,
+                id: variantId,
                 quantity: 1
               })
             })
-            .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Failed to add product to cart');
+              }
+              return response.json();
+            })
             .then(data => {
-              window.location.href = '/cart';
+              // Fetch updated cart to get current item count
+              return fetch('/cart.js');
+            })
+            .then(response => response.json())
+            .then(cart => {
+              // Update cart count in header
+              this.updateCartCount(cart.item_count);
+              
+              // Show success state
+              button.classList.remove('adding');
+              button.classList.add('added');
+              
+              // Reset button after 1.5 seconds
+              setTimeout(() => {
+                button.classList.remove('added');
+              }, 1500);
+              
+              // Trigger cart notification if available
+              this.triggerCartNotification();
             })
             .catch((error) => {
-              button.style.opacity = '1';
-              button.style.pointerEvents = 'auto';
+              console.error('Error adding to cart:', error);
+              button.classList.remove('adding');
+              alert('Failed to add product to cart. Please try again.');
             });
           });
         });
+      }
+
+      updateCartCount(count) {
+        // Update all cart count elements in the header
+        const cartCountElements = document.querySelectorAll('cart-count');
+        cartCountElements.forEach(el => {
+          el.textContent = count;
+          
+          // Add animation effect
+          el.style.transform = 'scale(1.2)';
+          setTimeout(() => {
+            el.style.transform = 'scale(1)';
+          }, 200);
+        });
+      }
+
+      triggerCartNotification() {
+        // Try to trigger the cart notification drawer if available
+        const cartNotification = document.querySelector('cart-notification');
+        if (cartNotification && typeof cartNotification.show === 'function') {
+          cartNotification.show();
+        }
+        
+        // Alternative: try to open mini-cart if available
+        const miniCartToggle = document.querySelector('[aria-controls="mini-cart"]');
+        if (miniCartToggle && !cartNotification) {
+          miniCartToggle.click();
+        }
       }
 
       startCountdown() {
