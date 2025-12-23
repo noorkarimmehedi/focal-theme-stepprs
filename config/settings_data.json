@@ -17,6 +17,7 @@
     "secondary_button_text_color": "#1c1b1b",
     "heading_font": "sans_serif_n4",
     "stagger_products_apparition": true,
+    "stagger_blog_posts_apparition": true,
     "reveal_product_media": true,
     "cart_icon": "tote_bag",
     "sections": {
@@ -26,7 +27,7 @@
           "announcement-bar-0": {
             "type": "message",
             "settings": {
-              "text": "Visit our store in Delhi to shop",
+              "text": "Apply XMAS400 at checkout to get 400 off",
               "learn_more_text": "Learn more",
               "title": "",
               "content": "",
