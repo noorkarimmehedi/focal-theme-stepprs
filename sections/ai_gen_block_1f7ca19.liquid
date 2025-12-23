@@ -6,47 +6,47 @@
     
     Use soft shadows, balanced padding, and neutral typography for a modern, editorial feel. The overall look should feel premium, minimal, and fashion-forward — focusing attention on the product visuals., in mobile version two products per row and in desktop version 4 products per row , there are so much gap on both left and right side on desktop version., instead of selecting individual products i want here to select a collection from the Shopify, there should be an option for adding a bottom button with all customization including color and border 
 {% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
   .ai-product-grid-{{ ai_gen_id }} {
-    background-color: {{ block.settings.background_color }};
-    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.section_padding }}px 20px;
   }
 
   .ai-product-grid-container-{{ ai_gen_id }} {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 {{ block.settings.container_padding }}px;
+    padding: 0 {{ section.settings.container_padding }}px;
   }
 
   .ai-product-grid-header-{{ ai_gen_id }} {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: {{ block.settings.header_spacing }}px;
+    margin-bottom: {{ section.settings.header_spacing }}px;
   }
 
   .ai-product-grid-title-{{ ai_gen_id }} {
-    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
-    font-weight: {{ block.settings.title_font.weight }};
-    font-size: {{ block.settings.title_size }}px;
-    letter-spacing: {{ block.settings.title_letter_spacing }}px;
+    font-family: {{ section.settings.title_font.family }}, {{ section.settings.title_font.fallback_families }};
+    font-weight: {{ section.settings.title_font.weight }};
+    font-size: {{ section.settings.title_size }}px;
+    letter-spacing: {{ section.settings.title_letter_spacing }}px;
     text-transform: uppercase;
-    color: {{ block.settings.title_color }};
+    color: {{ section.settings.title_color }};
     margin: 0;
   }
 
   .ai-product-grid-button-{{ ai_gen_id }} {
-    font-family: {{ block.settings.button_font.family }}, {{ block.settings.button_font.fallback_families }};
-    font-weight: {{ block.settings.button_font.weight }};
-    font-size: {{ block.settings.button_size }}px;
-    letter-spacing: {{ block.settings.button_letter_spacing }}px;
+    font-family: {{ section.settings.button_font.family }}, {{ section.settings.button_font.fallback_families }};
+    font-weight: {{ section.settings.button_font.weight }};
+    font-size: {{ section.settings.button_size }}px;
+    letter-spacing: {{ section.settings.button_letter_spacing }}px;
     text-transform: uppercase;
-    color: {{ block.settings.button_text_color }};
-    background-color: {{ block.settings.button_bg_color }};
-    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
-    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    color: {{ section.settings.button_text_color }};
+    background-color: {{ section.settings.button_bg_color }};
+    border: {{ section.settings.button_border_width }}px solid {{ section.settings.button_border_color }};
+    padding: {{ section.settings.button_padding_vertical }}px {{ section.settings.button_padding_horizontal }}px;
     text-decoration: none;
     display: inline-block;
     transition: all 0.3s ease;
@@ -54,15 +54,15 @@
   }
 
   .ai-product-grid-button-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.button_hover_bg }};
-    color: {{ block.settings.button_hover_text }};
-    border-color: {{ block.settings.button_hover_border }};
+    background-color: {{ section.settings.button_hover_bg }};
+    color: {{ section.settings.button_hover_text }};
+    border-color: {{ section.settings.button_hover_border }};
   }
 
   .ai-product-grid-items-{{ ai_gen_id }} {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: {{ block.settings.grid_gap }}px;
+    gap: {{ section.settings.grid_gap }}px;
     grid-auto-rows: 1fr;
   }
 
@@ -70,21 +70,21 @@
     text-decoration: none;
     display: grid;
     grid-template-rows: auto 1fr;
-    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
-    border-radius: {{ block.settings.card_border_radius }}px;
+    border: {{ section.settings.card_border_width }}px solid {{ section.settings.card_border_color }};
+    border-radius: {{ section.settings.card_border_radius }}px;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: {{ block.settings.card_shadow_h }}px {{ block.settings.card_shadow_v }}px {{ block.settings.card_shadow_blur }}px rgba(0, 0, 0, {{ block.settings.card_shadow_opacity | divided_by: 100.0 }});
+    box-shadow: {{ section.settings.card_shadow_h }}px {{ section.settings.card_shadow_v }}px {{ section.settings.card_shadow_blur }}px rgba(0, 0, 0, {{ section.settings.card_shadow_opacity | divided_by: 100.0 }});
   }
 
   .ai-product-card-{{ ai_gen_id }}:hover {
-    border-color: {{ block.settings.card_hover_border_color }};
+    border-color: {{ section.settings.card_hover_border_color }};
   }
 
   .ai-product-image-wrapper-{{ ai_gen_id }} {
     position: relative;
     width: 100%;
-    padding-bottom: {{ block.settings.image_aspect_ratio | times: 100 }}%;
+    padding-bottom: {{ section.settings.image_aspect_ratio | times: 100 }}%;
     overflow: hidden;
   }
 
@@ -121,59 +121,59 @@
   }
 
   .ai-product-info-{{ ai_gen_id }} {
-    text-align: {{ block.settings.text_alignment }};
-    padding: {{ block.settings.card_content_padding }}px;
+    text-align: {{ section.settings.text_alignment }};
+    padding: {{ section.settings.card_content_padding }}px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
   }
 
   .ai-product-name-{{ ai_gen_id }} {
-    font-family: {{ block.settings.product_name_font.family }}, {{ block.settings.product_name_font.fallback_families }};
-    font-weight: {{ block.settings.product_name_font.weight }};
-    font-size: {{ block.settings.product_name_size }}px;
-    letter-spacing: {{ block.settings.product_name_spacing }}px;
+    font-family: {{ section.settings.product_name_font.family }}, {{ section.settings.product_name_font.fallback_families }};
+    font-weight: {{ section.settings.product_name_font.weight }};
+    font-size: {{ section.settings.product_name_size }}px;
+    letter-spacing: {{ section.settings.product_name_spacing }}px;
     text-transform: uppercase;
-    color: {{ block.settings.product_name_color }};
-    margin: 0 0 {{ block.settings.name_price_gap }}px 0;
+    color: {{ section.settings.product_name_color }};
+    margin: 0 0 {{ section.settings.name_price_gap }}px 0;
     line-height: 1.3;
-    min-height: {{ block.settings.product_name_size | times: 1.3 | times: 2 | round }}px;
+    min-height: {{ section.settings.product_name_size | times: 1.3 | times: 2 | round }}px;
   }
 
   .ai-product-price-{{ ai_gen_id }} {
-    font-family: {{ block.settings.price_font.family }}, {{ block.settings.price_font.fallback_families }};
-    font-weight: {{ block.settings.price_font.weight }};
-    font-size: {{ block.settings.price_size }}px;
-    color: {{ block.settings.price_color }};
+    font-family: {{ section.settings.price_font.family }}, {{ section.settings.price_font.fallback_families }};
+    font-weight: {{ section.settings.price_font.weight }};
+    font-size: {{ section.settings.price_size }}px;
+    color: {{ section.settings.price_color }};
     margin: 0;
   }
 
   .ai-product-grid-bottom-{{ ai_gen_id }} {
     text-align: center;
-    margin-top: {{ block.settings.bottom_button_spacing }}px;
+    margin-top: {{ section.settings.bottom_button_spacing }}px;
   }
 
   .ai-product-grid-bottom-button-{{ ai_gen_id }} {
-    font-family: {{ block.settings.bottom_button_font.family }}, {{ block.settings.bottom_button_font.fallback_families }};
-    font-weight: {{ block.settings.bottom_button_font.weight }};
-    font-size: {{ block.settings.bottom_button_size }}px;
-    letter-spacing: {{ block.settings.bottom_button_letter_spacing }}px;
+    font-family: {{ section.settings.bottom_button_font.family }}, {{ section.settings.bottom_button_font.fallback_families }};
+    font-weight: {{ section.settings.bottom_button_font.weight }};
+    font-size: {{ section.settings.bottom_button_size }}px;
+    letter-spacing: {{ section.settings.bottom_button_letter_spacing }}px;
     text-transform: uppercase;
-    color: {{ block.settings.bottom_button_text_color }};
-    background-color: {{ block.settings.bottom_button_bg_color }};
-    border: {{ block.settings.bottom_button_border_width }}px solid {{ block.settings.bottom_button_border_color }};
-    padding: {{ block.settings.bottom_button_padding_vertical }}px {{ block.settings.bottom_button_padding_horizontal }}px;
+    color: {{ section.settings.bottom_button_text_color }};
+    background-color: {{ section.settings.bottom_button_bg_color }};
+    border: {{ section.settings.bottom_button_border_width }}px solid {{ section.settings.bottom_button_border_color }};
+    padding: {{ section.settings.bottom_button_padding_vertical }}px {{ section.settings.bottom_button_padding_horizontal }}px;
     text-decoration: none;
     display: inline-block;
     transition: all 0.3s ease;
     cursor: pointer;
-    border-radius: {{ block.settings.bottom_button_border_radius }}px;
+    border-radius: {{ section.settings.bottom_button_border_radius }}px;
   }
 
   .ai-product-grid-bottom-button-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.bottom_button_hover_bg }};
-    color: {{ block.settings.bottom_button_hover_text }};
-    border-color: {{ block.settings.bottom_button_hover_border }};
+    background-color: {{ section.settings.bottom_button_hover_bg }};
+    color: {{ section.settings.bottom_button_hover_text }};
+    border-color: {{ section.settings.bottom_button_hover_border }};
   }
 
   @media screen and (min-width: 750px) {
@@ -184,7 +184,7 @@
 
   @media screen and (max-width: 767px) {
     .ai-product-grid-{{ ai_gen_id }} {
-      padding: {{ block.settings.section_padding | times: 0.7 }}px 8px !important;
+      padding: {{ section.settings.section_padding | times: 0.7 }}px 8px !important;
       overflow-x: hidden !important;
     }
 
@@ -200,56 +200,56 @@
     }
 
     .ai-product-grid-title-{{ ai_gen_id }} {
-      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+      font-size: {{ section.settings.title_size | times: 0.8 }}px;
     }
 
     .ai-product-grid-button-{{ ai_gen_id }} {
-      font-size: {{ block.settings.button_size | times: 0.85 }}px;
-      padding: {{ block.settings.button_padding_vertical | times: 0.8 }}px {{ block.settings.button_padding_horizontal | times: 0.8 }}px;
+      font-size: {{ section.settings.button_size | times: 0.85 }}px;
+      padding: {{ section.settings.button_padding_vertical | times: 0.8 }}px {{ section.settings.button_padding_horizontal | times: 0.8 }}px;
     }
 
     .ai-product-grid-items-{{ ai_gen_id }} {
-      gap: {{ block.settings.grid_gap | times: 0.7 }}px;
+      gap: {{ section.settings.grid_gap | times: 0.7 }}px;
     }
 
     .ai-product-name-{{ ai_gen_id }} {
-      font-size: {{ block.settings.product_name_size | times: 0.85 }}px;
-      min-height: {{ block.settings.product_name_size | times: 0.85 | times: 1.3 | times: 2 | round }}px;
+      font-size: {{ section.settings.product_name_size | times: 0.85 }}px;
+      min-height: {{ section.settings.product_name_size | times: 0.85 | times: 1.3 | times: 2 | round }}px;
     }
 
     .ai-product-price-{{ ai_gen_id }} {
-      font-size: {{ block.settings.price_size | times: 0.9 }}px;
+      font-size: {{ section.settings.price_size | times: 0.9 }}px;
     }
 
     .ai-product-grid-bottom-button-{{ ai_gen_id }} {
-      font-size: {{ block.settings.bottom_button_size | times: 0.85 }}px;
-      padding: {{ block.settings.bottom_button_padding_vertical | times: 0.8 }}px {{ block.settings.bottom_button_padding_horizontal | times: 0.8 }}px;
+      font-size: {{ section.settings.bottom_button_size | times: 0.85 }}px;
+      padding: {{ section.settings.bottom_button_padding_vertical | times: 0.8 }}px {{ section.settings.bottom_button_padding_horizontal | times: 0.8 }}px;
     }
 
     .ai-product-info-{{ ai_gen_id }} {
-      padding: {{ block.settings.card_content_padding | times: 0.8 }}px;
+      padding: {{ section.settings.card_content_padding | times: 0.8 }}px;
     }
   }
 {% endstyle %}
 
-<div class="ai-product-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div class="ai-product-grid-{{ ai_gen_id }}">
   <div class="ai-product-grid-container-{{ ai_gen_id }}">
     <div class="ai-product-grid-header-{{ ai_gen_id }}">
-      <h2 class="ai-product-grid-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
-      {% if block.settings.button_link != blank %}
-        <a href="{{ block.settings.button_link }}" class="ai-product-grid-button-{{ ai_gen_id }}">
-          {{ block.settings.button_text }}
+      <h2 class="ai-product-grid-title-{{ ai_gen_id }}">{{ section.settings.section_title }}</h2>
+      {% if section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="ai-product-grid-button-{{ ai_gen_id }}">
+          {{ section.settings.button_text }}
         </a>
-      {% elsif block.settings.collection != blank %}
-        <a href="{{ block.settings.collection.url }}" class="ai-product-grid-button-{{ ai_gen_id }}">
-          {{ block.settings.button_text }}
+      {% elsif section.settings.collection != blank %}
+        <a href="{{ section.settings.collection.url }}" class="ai-product-grid-button-{{ ai_gen_id }}">
+          {{ section.settings.button_text }}
         </a>
       {% endif %}
     </div>
 
     <div class="ai-product-grid-items-{{ ai_gen_id }}">
-      {% if block.settings.collection != blank %}
-        {% for product in block.settings.collection.products limit: 4 %}
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products limit: 4 %}
           <a href="{{ product.url }}" class="ai-product-card-{{ ai_gen_id }}">
             <div class="ai-product-image-wrapper-{{ ai_gen_id }}">
               {% if product.featured_image %}
@@ -259,7 +259,7 @@
                   class="ai-product-image-{{ ai_gen_id }}"
                   loading="lazy"
                   width="800"
-                  height="{{ 800 | times: block.settings.image_aspect_ratio | round }}"
+                  height="{{ 800 | times: section.settings.image_aspect_ratio | round }}"
                 >
               {% else %}
                 <div class="ai-product-placeholder-{{ ai_gen_id }}">
@@ -290,15 +290,15 @@
       {% endif %}
     </div>
 
-    {% if block.settings.show_bottom_button %}
+    {% if section.settings.show_bottom_button %}
       <div class="ai-product-grid-bottom-{{ ai_gen_id }}">
-        {% if block.settings.bottom_button_link != blank %}
-          <a href="{{ block.settings.bottom_button_link }}" class="ai-product-grid-bottom-button-{{ ai_gen_id }}">
-            {{ block.settings.bottom_button_text }}
+        {% if section.settings.bottom_button_link != blank %}
+          <a href="{{ section.settings.bottom_button_link }}" class="ai-product-grid-bottom-button-{{ ai_gen_id }}">
+            {{ section.settings.bottom_button_text }}
           </a>
-        {% elsif block.settings.collection != blank %}
-          <a href="{{ block.settings.collection.url }}" class="ai-product-grid-bottom-button-{{ ai_gen_id }}">
-            {{ block.settings.bottom_button_text }}
+        {% elsif section.settings.collection != blank %}
+          <a href="{{ section.settings.collection.url }}" class="ai-product-grid-bottom-button-{{ ai_gen_id }}">
+            {{ section.settings.bottom_button_text }}
           </a>
         {% endif %}
       </div>

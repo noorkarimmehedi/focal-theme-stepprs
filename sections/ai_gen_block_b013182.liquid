@@ -4,7 +4,7 @@
 
 
 {% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
   .ai-hero-{{ ai_gen_id }} {
@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: {{ block.settings.height_desktop }}px;
+    min-height: {{ section.settings.height_desktop }}px;
     overflow: hidden;
     width: 100%;}
 
@@ -37,7 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: {{ block.settings.placeholder_color }};
+    background-color: {{ section.settings.placeholder_color }};
   }
 
   .ai-hero-background-placeholder-{{ ai_gen_id }} svg {
@@ -52,8 +52,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: {{ block.settings.overlay_color }};
-    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
     z-index: 2;
   }
 
@@ -63,26 +63,26 @@
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: {{ block.settings.content_vertical_position }};
-    justify-content: {{ block.settings.content_horizontal_position }};
+    align-items: {{ section.settings.content_vertical_position }};
+    justify-content: {{ section.settings.content_horizontal_position }};
     padding: 20px;
   }
 
   .ai-hero-content-{{ ai_gen_id }} {
-    text-align: {{ block.settings.text_alignment }};
-    max-width: {{ block.settings.content_width }}px;
+    text-align: {{ section.settings.text_alignment }};
+    max-width: {{ section.settings.content_width }}px;
     padding: 40px;
-    background: rgba({{ block.settings.glassmorphism_color | color_to_rgb }}, {{ block.settings.glassmorphism_opacity | divided_by: 100.0 }});
-    backdrop-filter: blur({{ block.settings.blur_amount }}px);
-    -webkit-backdrop-filter: blur({{ block.settings.blur_amount }}px);
-    border-radius: {{ block.settings.border_radius }}px;
+    background: rgba({{ section.settings.glassmorphism_color | color_to_rgb }}, {{ section.settings.glassmorphism_opacity | divided_by: 100.0 }});
+    backdrop-filter: blur({{ section.settings.blur_amount }}px);
+    -webkit-backdrop-filter: blur({{ section.settings.blur_amount }}px);
+    border-radius: {{ section.settings.border_radius }}px;
     border:1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   }
 
   .ai-hero-heading-{{ ai_gen_id }} {
-    font-size: {{ block.settings.heading_size }}px;
-    color: {{ block.settings.heading_color }};
+    font-size: {{ section.settings.heading_size }}px;
+    color: {{ section.settings.heading_color }};
     margin-bottom: 20px;
     opacity: 0;
     transform: translateY(20px);
@@ -91,8 +91,8 @@
   }
 
   .ai-hero-subheading-{{ ai_gen_id }} {
-    font-size: {{ block.settings.subheading_size }}px;
-    color: {{ block.settings.text_color }};
+    font-size: {{ section.settings.subheading_size }}px;
+    color: {{ section.settings.text_color }};
     margin-bottom: 30px;
     opacity: 0;
     transform: translateY(20px);
@@ -103,10 +103,10 @@
   .ai-hero-button-{{ ai_gen_id }} {
     display: inline-block;
     padding: 15px 30px;
-    background-color: {{ block.settings.button_color }};
-    color: {{ block.settings.button_text_color }};
+    background-color: {{ section.settings.button_color }};
+    color: {{ section.settings.button_text_color }};
     text-decoration: none;
-    border-radius: {{ block.settings.button_border_radius }}px;
+    border-radius: {{ section.settings.button_border_radius }}px;
     font-size: 16px;
     transition: all 0.3s ease;
     opacity: 0;
@@ -116,7 +116,7 @@
   }
 
   .ai-hero-button-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.button_hover_color }};
+    background-color: {{ section.settings.button_hover_color }};
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
@@ -134,12 +134,12 @@
 
   @media screen and (max-width: 749px) {
     .ai-hero-{{ ai_gen_id }} {
-      min-height: {{ block.settings.height_mobile }}px;
+      min-height: {{ section.settings.height_mobile }}px;
     }
 
     .ai-hero-content-wrapper-{{ ai_gen_id }} {
-      align-items: {{ block.settings.content_vertical_position_mobile }};
-      justify-content: {{ block.settings.content_horizontal_position_mobile }};
+      align-items: {{ section.settings.content_vertical_position_mobile }};
+      justify-content: {{ section.settings.content_horizontal_position_mobile }};
     }
 
     .ai-hero-content-{{ ai_gen_id }} {
@@ -147,24 +147,24 @@
     }
 
     .ai-hero-heading-{{ ai_gen_id }} {
-      font-size: {{ block.settings.heading_size_mobile }}px;
+      font-size: {{ section.settings.heading_size_mobile }}px;
     }
 
     .ai-hero-subheading-{{ ai_gen_id }} {
-      font-size: {{ block.settings.subheading_size_mobile }}px;
+      font-size: {{ section.settings.subheading_size_mobile }}px;
     }
   }
 {% endstyle %}
 
-<div class="ai-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div class="ai-hero-{{ ai_gen_id }}">
   <div class="ai-hero-background-{{ ai_gen_id }}">
-    {% if block.settings.background_image %}
+    {% if section.settings.background_image %}
       <img 
-        src="{{ block.settings.background_image | image_url: width: 2000 }}" 
-        alt="{{ block.settings.background_image.alt | escape }}"
+        src="{{ section.settings.background_image | image_url: width: 2000 }}" 
+        alt="{{ section.settings.background_image.alt | escape }}"
         loading="lazy"
-        width="{{ block.settings.background_image.width }}"
-        height="{{ block.settings.background_image.height }}"
+        width="{{ section.settings.background_image.width }}"
+        height="{{ section.settings.background_image.height }}"
       >
     {% else %}
       <div class="ai-hero-background-placeholder-{{ ai_gen_id }}">
@@ -176,17 +176,17 @@
   
   <div class="ai-hero-content-wrapper-{{ ai_gen_id }}">
     <div class="ai-hero-content-{{ ai_gen_id }}">
-      {% if block.settings.heading != blank %}
-        <h1 class="ai-hero-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+      {% if section.settings.heading != blank %}
+        <h1 class="ai-hero-heading-{{ ai_gen_id }}">{{ section.settings.heading }}</h1>
       {% endif %}
       
-      {% if block.settings.subheading != blank %}
-        <div class="ai-hero-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
+      {% if section.settings.subheading != blank %}
+        <div class="ai-hero-subheading-{{ ai_gen_id }}">{{ section.settings.subheading }}</div>
       {% endif %}
       
-      {% if block.settings.button_label != blank and block.settings.button_link != blank %}
-        <a href="{{ block.settings.button_link }}" class="ai-hero-button-{{ ai_gen_id }}">
-          {{ block.settings.button_label }}
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="ai-hero-button-{{ ai_gen_id }}">
+          {{ section.settings.button_label }}
         </a>
       {% endif %}
     </div>

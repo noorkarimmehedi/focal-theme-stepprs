@@ -1,51 +1,51 @@
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
-  {{ block.settings.text_font | font_face: font_display: 'swap' }}
+  {{ section.settings.text_font | font_face: font_display: 'swap' }}
 
   .fashion-text-{{ ai_gen_id }} {
-    background-color: {{ block.settings.background_color }};
-    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.section_padding }}px 20px;
   }
 
   .fashion-text__container-{{ ai_gen_id }} {
-    max-width: {{ block.settings.max_width }}px;
+    max-width: {{ section.settings.max_width }}px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: {{ block.settings.line_spacing }}px;
+    gap: {{ section.settings.line_spacing }}px;
   }
 
   .fashion-text__line-{{ ai_gen_id }} {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: {{ block.settings.spacing }}px;
+    gap: {{ section.settings.spacing }}px;
     flex-wrap: wrap;
   }
 
   .fashion-text__text-{{ ai_gen_id }} {
-    font-family: {{ block.settings.text_font.family }}, {{ block.settings.text_font.fallback_families }};
-    font-weight: {{ block.settings.text_font.weight }};
-    font-style: {{ block.settings.text_font.style }};
-    font-size: {{ block.settings.font_size }}px;
-    color: {{ block.settings.text_color }};
+    font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};
+    font-weight: {{ section.settings.text_font.weight }};
+    font-style: {{ section.settings.text_font.style }};
+    font-size: {{ section.settings.font_size }}px;
+    color: {{ section.settings.text_color }};
     line-height: 1.2;
     margin: 0;
     white-space: nowrap;
   }
 
   .fashion-text__box-{{ ai_gen_id }} {
-    font-family: {{ block.settings.text_font.family }}, {{ block.settings.text_font.fallback_families }};
-    font-weight: {{ block.settings.text_font.weight }};
-    font-style: {{ block.settings.text_font.style }};
-    font-size: {{ block.settings.font_size }}px;
-    color: {{ block.settings.text_color }};
+    font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};
+    font-weight: {{ section.settings.text_font.weight }};
+    font-style: {{ section.settings.text_font.style }};
+    font-size: {{ section.settings.font_size }}px;
+    color: {{ section.settings.text_color }};
     line-height: 1.2;
     margin: 0;
-    padding: {{ block.settings.box_padding_vertical }}px {{ block.settings.box_padding_horizontal }}px;
-    border: {{ block.settings.box_border_width }}px solid {{ block.settings.box_border_color }};
-    border-radius: {{ block.settings.box_border_radius }}px;
+    padding: {{ section.settings.box_padding_vertical }}px {{ section.settings.box_padding_horizontal }}px;
+    border: {{ section.settings.box_border_width }}px solid {{ section.settings.box_border_color }};
+    border-radius: {{ section.settings.box_border_radius }}px;
     white-space: nowrap;
   }
 
@@ -58,29 +58,29 @@
 
   .fashion-text__image-wrapper-{{ ai_gen_id }} {
     position: relative;
-    border-radius: {{ block.settings.border_radius }}px;
+    border-radius: {{ section.settings.border_radius }}px;
     overflow: hidden;
-    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
-    box-shadow: {{ block.settings.shadow_horizontal }}px {{ block.settings.shadow_vertical }}px {{ block.settings.shadow_blur }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity }});
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    box-shadow: {{ section.settings.shadow_horizontal }}px {{ section.settings.shadow_vertical }}px {{ section.settings.shadow_blur }}px rgba(0, 0, 0, {{ section.settings.shadow_opacity }});
     transition: border-color 0.3s ease, transform 0.3s ease;
   }
 
   .fashion-text__image-link-{{ ai_gen_id }}:hover .fashion-text__image-wrapper-{{ ai_gen_id }} {
-    border-color: {{ block.settings.hover_border_color }};
+    border-color: {{ section.settings.hover_border_color }};
     transform: translateY(-2px);
   }
 
   .fashion-text__image-{{ ai_gen_id }} {
     display: block;
-    width: {{ block.settings.image_width }}px;
-    height: {{ block.settings.image_height }}px;
+    width: {{ section.settings.image_width }}px;
+    height: {{ section.settings.image_height }}px;
     object-fit: cover;
   }
 
   .fashion-text__placeholder-{{ ai_gen_id }} {
-    width: {{ block.settings.image_width }}px;
-    height: {{ block.settings.image_height }}px;
-    background-color: {{ block.settings.placeholder_color }};
+    width: {{ section.settings.image_width }}px;
+    height: {{ section.settings.image_height }}px;
+    background-color: {{ section.settings.placeholder_color }};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,8 +99,8 @@
     z-index: 9999;
     opacity: 0;
     transform: translateY(10px) scale(0.95);
-    transition: opacity {{ block.settings.preview_transition_speed }}s ease, 
-                transform {{ block.settings.preview_transition_speed }}s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: opacity {{ section.settings.preview_transition_speed }}s ease, 
+                transform {{ section.settings.preview_transition_speed }}s cubic-bezier(0.34, 1.56, 0.64, 1);
     will-change: transform, opacity;
   }
 
@@ -110,87 +110,87 @@
   }
 
   .fashion-text__preview-inner-{{ ai_gen_id }} {
-    background: {{ block.settings.preview_background }};
-    border-radius: {{ block.settings.preview_border_radius }}px;
-    padding: {{ block.settings.preview_padding }}px;
-    box-shadow: 0 {{ block.settings.preview_shadow_blur }}px {{ block.settings.preview_shadow_spread }}px rgba(0, 0, 0, {{ block.settings.preview_shadow_opacity }}),
-                0 0 0 {{ block.settings.preview_border_width }}px {{ block.settings.preview_border_color }};
+    background: {{ section.settings.preview_background }};
+    border-radius: {{ section.settings.preview_border_radius }}px;
+    padding: {{ section.settings.preview_padding }}px;
+    box-shadow: 0 {{ section.settings.preview_shadow_blur }}px {{ section.settings.preview_shadow_spread }}px rgba(0, 0, 0, {{ section.settings.preview_shadow_opacity }}),
+                0 0 0 {{ section.settings.preview_border_width }}px {{ section.settings.preview_border_color }};
     overflow: hidden;
     backdrop-filter: blur(10px);
   }
 
   .fashion-text__preview-image-{{ ai_gen_id }} {
-    width: {{ block.settings.preview_width }}px;
-    height: {{ block.settings.preview_height }}px;
+    width: {{ section.settings.preview_width }}px;
+    height: {{ section.settings.preview_height }}px;
     object-fit: cover;
-    border-radius: calc({{ block.settings.preview_border_radius }}px - 4px);
+    border-radius: calc({{ section.settings.preview_border_radius }}px - 4px);
     display: block;
   }
 
   @media screen and (max-width: 749px) {
     .fashion-text__text-{{ ai_gen_id }},
     .fashion-text__box-{{ ai_gen_id }} {
-      font-size: {{ block.settings.font_size | times: 0.6 }}px;
+      font-size: {{ section.settings.font_size | times: 0.6 }}px;
     }
 
     .fashion-text__box-{{ ai_gen_id }} {
-      padding: {{ block.settings.box_padding_vertical | times: 0.6 }}px {{ block.settings.box_padding_horizontal | times: 0.6 }}px;
+      padding: {{ section.settings.box_padding_vertical | times: 0.6 }}px {{ section.settings.box_padding_horizontal | times: 0.6 }}px;
     }
 
     .fashion-text__image-{{ ai_gen_id }},
     .fashion-text__placeholder-{{ ai_gen_id }} {
-      width: {{ block.settings.image_width | times: 0.6 }}px;
-      height: {{ block.settings.image_height | times: 0.6 }}px;
+      width: {{ section.settings.image_width | times: 0.6 }}px;
+      height: {{ section.settings.image_height | times: 0.6 }}px;
     }
 
     .fashion-text__line-{{ ai_gen_id }} {
-      gap: {{ block.settings.spacing | times: 0.6 }}px;
+      gap: {{ section.settings.spacing | times: 0.6 }}px;
     }
 
     .fashion-text__container-{{ ai_gen_id }} {
-      gap: {{ block.settings.line_spacing | times: 0.6 }}px;
+      gap: {{ section.settings.line_spacing | times: 0.6 }}px;
     }
 
     .fashion-text__preview-image-{{ ai_gen_id }} {
-      width: calc({{ block.settings.preview_width }}px * 0.8);
-      height: calc({{ block.settings.preview_height }}px * 0.8);
+      width: calc({{ section.settings.preview_width }}px * 0.8);
+      height: calc({{ section.settings.preview_height }}px * 0.8);
     }
 
     .fashion-text__preview-inner-{{ ai_gen_id }} {
-      padding: calc({{ block.settings.preview_padding }}px * 0.8);
+      padding: calc({{ section.settings.preview_padding }}px * 0.8);
     }
   }
 {% endstyle %}
 
-<div class="fashion-text-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div class="fashion-text-{{ ai_gen_id }}">
   <div class="fashion-text__container-{{ ai_gen_id }}">
     
     <!-- Line 1: TIMELESS | 50% OFF | [Image] -->
     <div class="fashion-text__line-{{ ai_gen_id }}">
-      {% if block.settings.text_1 != blank %}
-        <span class="fashion-text__text-{{ ai_gen_id }}">{{ block.settings.text_1 }}</span>
+      {% if section.settings.text_1 != blank %}
+        <span class="fashion-text__text-{{ ai_gen_id }}">{{ section.settings.text_1 }}</span>
       {% endif %}
       
-      {% if block.settings.box_1 != blank %}
-        <div class="fashion-text__box-{{ ai_gen_id }}">{{ block.settings.box_1 }}</div>
+      {% if section.settings.box_1 != blank %}
+        <div class="fashion-text__box-{{ ai_gen_id }}">{{ section.settings.box_1 }}</div>
       {% endif %}
       
-      {% if block.settings.show_image_1 %}
+      {% if section.settings.show_image_1 %}
         <a 
-          href="{{ block.settings.image_1_link }}" 
+          href="{{ section.settings.image_1_link }}" 
           class="fashion-text__image-link-{{ ai_gen_id }}"
-          data-preview-image="{% if block.settings.image_1 %}{{ block.settings.image_1 | image_url: width: 800 }}{% endif %}"
-          {% if block.settings.image_1_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
+          data-preview-image="{% if section.settings.image_1 %}{{ section.settings.image_1 | image_url: width: 800 }}{% endif %}"
+          {% if section.settings.image_1_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
         >
           <div class="fashion-text__image-wrapper-{{ ai_gen_id }}">
-            {% if block.settings.image_1 %}
+            {% if section.settings.image_1 %}
               <img
-                src="{{ block.settings.image_1 | image_url: width: 400 }}"
-                alt="{{ block.settings.image_1.alt | escape }}"
+                src="{{ section.settings.image_1 | image_url: width: 400 }}"
+                alt="{{ section.settings.image_1.alt | escape }}"
                 class="fashion-text__image-{{ ai_gen_id }}"
                 loading="lazy"
-                width="{{ block.settings.image_width }}"
-                height="{{ block.settings.image_height }}"
+                width="{{ section.settings.image_width }}"
+                height="{{ section.settings.image_height }}"
               >
             {% else %}
               <div class="fashion-text__placeholder-{{ ai_gen_id }}">
@@ -204,33 +204,33 @@
 
     <!-- Line 2: MODERN LOOKS (centered box) -->
     <div class="fashion-text__line-{{ ai_gen_id }}">
-      {% if block.settings.box_2 != blank %}
-        <div class="fashion-text__box-{{ ai_gen_id }}">{{ block.settings.box_2 }}</div>
+      {% if section.settings.box_2 != blank %}
+        <div class="fashion-text__box-{{ ai_gen_id }}">{{ section.settings.box_2 }}</div>
       {% endif %}
     </div>
 
     <!-- Line 3: HOT & HAPPENING | [Image] -->
     <div class="fashion-text__line-{{ ai_gen_id }}">
-      {% if block.settings.text_3 != blank %}
-        <span class="fashion-text__text-{{ ai_gen_id }}">{{ block.settings.text_3 }}</span>
+      {% if section.settings.text_3 != blank %}
+        <span class="fashion-text__text-{{ ai_gen_id }}">{{ section.settings.text_3 }}</span>
       {% endif %}
       
-      {% if block.settings.show_image_3 %}
+      {% if section.settings.show_image_3 %}
         <a 
-          href="{{ block.settings.image_3_link }}" 
+          href="{{ section.settings.image_3_link }}" 
           class="fashion-text__image-link-{{ ai_gen_id }}"
-          data-preview-image="{% if block.settings.image_3 %}{{ block.settings.image_3 | image_url: width: 800 }}{% endif %}"
-          {% if block.settings.image_3_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
+          data-preview-image="{% if section.settings.image_3 %}{{ section.settings.image_3 | image_url: width: 800 }}{% endif %}"
+          {% if section.settings.image_3_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
         >
           <div class="fashion-text__image-wrapper-{{ ai_gen_id }}">
-            {% if block.settings.image_3 %}
+            {% if section.settings.image_3 %}
               <img
-                src="{{ block.settings.image_3 | image_url: width: 400 }}"
-                alt="{{ block.settings.image_3.alt | escape }}"
+                src="{{ section.settings.image_3 | image_url: width: 400 }}"
+                alt="{{ section.settings.image_3.alt | escape }}"
                 class="fashion-text__image-{{ ai_gen_id }}"
                 loading="lazy"
-                width="{{ block.settings.image_width }}"
-                height="{{ block.settings.image_height }}"
+                width="{{ section.settings.image_width }}"
+                height="{{ section.settings.image_height }}"
               >
             {% else %}
               <div class="fashion-text__placeholder-{{ ai_gen_id }}">
@@ -244,26 +244,26 @@
 
     <!-- Line 4: STYLISH | [Image] | TRENDY -->
     <div class="fashion-text__line-{{ ai_gen_id }}">
-      {% if block.settings.text_4 != blank %}
-        <span class="fashion-text__text-{{ ai_gen_id }}">{{ block.settings.text_4 }}</span>
+      {% if section.settings.text_4 != blank %}
+        <span class="fashion-text__text-{{ ai_gen_id }}">{{ section.settings.text_4 }}</span>
       {% endif %}
       
-      {% if block.settings.show_image_4 %}
+      {% if section.settings.show_image_4 %}
         <a 
-          href="{{ block.settings.image_4_link }}" 
+          href="{{ section.settings.image_4_link }}" 
           class="fashion-text__image-link-{{ ai_gen_id }}"
-          data-preview-image="{% if block.settings.image_4 %}{{ block.settings.image_4 | image_url: width: 800 }}{% endif %}"
-          {% if block.settings.image_4_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
+          data-preview-image="{% if section.settings.image_4 %}{{ section.settings.image_4 | image_url: width: 800 }}{% endif %}"
+          {% if section.settings.image_4_link == blank %}aria-disabled="true" tabindex="-1"{% endif %}
         >
           <div class="fashion-text__image-wrapper-{{ ai_gen_id }}">
-            {% if block.settings.image_4 %}
+            {% if section.settings.image_4 %}
               <img
-                src="{{ block.settings.image_4 | image_url: width: 400 }}"
-                alt="{{ block.settings.image_4.alt | escape }}"
+                src="{{ section.settings.image_4 | image_url: width: 400 }}"
+                alt="{{ section.settings.image_4.alt | escape }}"
                 class="fashion-text__image-{{ ai_gen_id }}"
                 loading="lazy"
-                width="{{ block.settings.image_width }}"
-                height="{{ block.settings.image_height }}"
+                width="{{ section.settings.image_width }}"
+                height="{{ section.settings.image_height }}"
               >
             {% else %}
               <div class="fashion-text__placeholder-{{ ai_gen_id }}">
@@ -274,15 +274,15 @@
         </a>
       {% endif %}
       
-      {% if block.settings.box_4 != blank %}
-        <div class="fashion-text__box-{{ ai_gen_id }}">{{ block.settings.box_4 }}</div>
+      {% if section.settings.box_4 != blank %}
+        <div class="fashion-text__box-{{ ai_gen_id }}">{{ section.settings.box_4 }}</div>
       {% endif %}
     </div>
 
     <!-- Line 5: VIBES (centered box) -->
     <div class="fashion-text__line-{{ ai_gen_id }}">
-      {% if block.settings.box_5 != blank %}
-        <div class="fashion-text__box-{{ ai_gen_id }}">{{ block.settings.box_5 }}</div>
+      {% if section.settings.box_5 != blank %}
+        <div class="fashion-text__box-{{ ai_gen_id }}">{{ section.settings.box_5 }}</div>
       {% endif %}
     </div>
 
@@ -306,8 +306,8 @@
   if (!previewCard || !previewImage) return;
   
   const isMobile = window.innerWidth <= 749;
-  const cardWidth = ({{ block.settings.preview_width }} + ({{ block.settings.preview_padding }} * 2)) * (isMobile ? 0.8 : 1);
-  const cardHeight = ({{ block.settings.preview_height }} + ({{ block.settings.preview_padding }} * 2)) * (isMobile ? 0.8 : 1);
+  const cardWidth = ({{ section.settings.preview_width }} + ({{ section.settings.preview_padding }} * 2)) * (isMobile ? 0.8 : 1);
+  const cardHeight = ({{ section.settings.preview_height }} + ({{ section.settings.preview_padding }} * 2)) * (isMobile ? 0.8 : 1);
   const offsetY = 20;
   
   function updatePosition(e) {

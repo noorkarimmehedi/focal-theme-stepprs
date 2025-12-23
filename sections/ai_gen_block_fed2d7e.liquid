@@ -2,49 +2,49 @@
   @prompt
     build a scrolling text or logo section for me. continuously scrolling from right o left and everything should be cutomizable from speed to font to size and color
 {% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
   .ai-scrolling-text-{{ ai_gen_id }} {
     width: 100%;
     overflow: hidden;
-    background-color: {{ block.settings.background_color }};
-    padding: {{ block.settings.padding_vertical }}px 0;
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.padding_vertical }}px 0;
     position: relative;
   }
 
   .ai-scrolling-text-wrapper-{{ ai_gen_id }} {
     display: flex;
     width: fit-content;
-    animation: ai-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+    animation: ai-scroll-{{ ai_gen_id }} {{ section.settings.scroll_speed }}s linear infinite;
   }
 
   .ai-scrolling-text-item-{{ ai_gen_id }} {
     display: flex;
     align-items: center;
     white-space: nowrap;
-    padding: 0 {{ block.settings.item_spacing }}px;
+    padding: 0 {{ section.settings.item_spacing }}px;
   }
 
   .ai-scrolling-text-content-{{ ai_gen_id }} {
-    font-size: {{ block.settings.font_size }}px;
-    color: {{ block.settings.text_color }};
-    font-weight: {{ block.settings.font_weight }};
-    text-transform: {{ block.settings.text_transform }};
-    letter-spacing: {{ block.settings.letter_spacing }}px;
+    font-size: {{ section.settings.font_size }}px;
+    color: {{ section.settings.text_color }};
+    font-weight: {{ section.settings.font_weight }};
+    text-transform: {{ section.settings.text_transform }};
+    letter-spacing: {{ section.settings.letter_spacing }}px;
   }
 
   .ai-scrolling-text-image-{{ ai_gen_id }} {
-    height: {{ block.settings.logo_height }}px;
+    height: {{ section.settings.logo_height }}px;
     width: auto;
     object-fit: contain;
   }
 
   .ai-scrolling-text-separator-{{ ai_gen_id }} {
     display: inline-block;
-    margin: 0 {{ block.settings.separator_spacing }}px;
-    color: {{ block.settings.separator_color }};
-    font-size: {{ block.settings.separator_size }}px;
+    margin: 0 {{ section.settings.separator_spacing }}px;
+    color: {{ section.settings.separator_color }};
+    font-size: {{ section.settings.separator_size }}px;
   }
 
   @keyframes ai-scroll-{{ ai_gen_id }} {
@@ -57,23 +57,23 @@
   }
 
   .ai-scrolling-text-{{ ai_gen_id }}:hover .ai-scrolling-text-wrapper-{{ ai_gen_id }} {
-    {% if block.settings.pause_on_hover %}
+    {% if section.settings.pause_on_hover %}
       animation-play-state: paused;
     {% endif %}
   }
 
   @media screen and (max-width: 749px) {
     .ai-scrolling-text-content-{{ ai_gen_id }} {
-      font-size: {{ block.settings.font_size | times: 0.8 }}px;
+      font-size: {{ section.settings.font_size | times: 0.8 }}px;
     }
 
     .ai-scrolling-text-image-{{ ai_gen_id }} {
-      height: {{ block.settings.logo_height | times: 0.8 }}px;
+      height: {{ section.settings.logo_height | times: 0.8 }}px;
     }
   }
 {% endstyle %}
 
-<div class="ai-scrolling-text-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div class="ai-scrolling-text-{{ ai_gen_id }}">
   <div class="ai-scrolling-text-wrapper-{{ ai_gen_id }}">
     {% for i in (1..2) %}
       {% for item in (1..10) %}
@@ -82,15 +82,15 @@
         {% assign text_key = 'item_' | append: item | append: '_text' %}
         {% assign image_key = 'item_' | append: item | append: '_image' %}
         
-        {% assign item_type = block.settings[type_key] %}
-        {% assign item_text = block.settings[text_key] %}
-        {% assign item_image = block.settings[image_key] %}
+        {% assign item_type = section.settings[type_key] %}
+        {% assign item_text = section.settings[text_key] %}
+        {% assign item_image = section.settings[image_key] %}
         
         {% if item_type == 'text' and item_text != blank %}
           <div class="ai-scrolling-text-item-{{ ai_gen_id }}">
             <span class="ai-scrolling-text-content-{{ ai_gen_id }}">{{ item_text }}</span>
-            {% if block.settings.show_separator %}
-              <span class="ai-scrolling-text-separator-{{ ai_gen_id }}">{{ block.settings.separator_symbol }}</span>
+            {% if section.settings.show_separator %}
+              <span class="ai-scrolling-text-separator-{{ ai_gen_id }}">{{ section.settings.separator_symbol }}</span>
             {% endif %}
           </div>
         {% elsif item_type == 'logo' and item_image != blank %}
@@ -103,8 +103,8 @@
               width="{{ item_image.width }}"
               height="{{ item_image.height }}"
             >
-            {% if block.settings.show_separator %}
-              <span class="ai-scrolling-text-separator-{{ ai_gen_id }}">{{ block.settings.separator_symbol }}</span>
+            {% if section.settings.show_separator %}
+              <span class="ai-scrolling-text-separator-{{ ai_gen_id }}">{{ section.settings.separator_symbol }}</span>
             {% endif %}
           </div>
         {% endif %}
