@@ -99,6 +99,7 @@
     },
     "ai_gen_block_fed2d7e_pLXDXE": {
       "type": "ai_gen_block_fed2d7e",
+      "disabled": true,
       "settings": {
         "background_color": "#000000",
         "padding_vertical": 20,
@@ -137,6 +138,61 @@
         "item_10_type": "text",
         "item_10_text": ""
       }
+    },
+    "176650291494ce3b1f": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_478b635_4Px8tK": {
+          "type": "ai_gen_block_478b635",
+          "settings": {
+            "collection": "best-sellers",
+            "products_to_show": 4,
+            "background_color": "#ffffff",
+            "section_padding_top": 50,
+            "section_padding_bottom": 50,
+            "container_padding": 20,
+            "container_padding_mobile": 0,
+            "heading": "",
+            "heading_font": "system_ui_n4",
+            "heading_size": 32,
+            "heading_size_mobile": 24,
+            "heading_color": "#1c1b1b",
+            "heading_text_transform": "none",
+            "heading_alignment": "center",
+            "heading_spacing": 30,
+            "products_per_row": 4,
+            "products_per_row_mobile": "2",
+            "grid_gap": 20,
+            "grid_gap_mobile": 0,
+            "product_card_background": "#ffffff",
+            "product_card_border_color": "#1c1b1b",
+            "product_card_border_width": 1,
+            "product_card_border_radius": 0,
+            "product_card_padding": 15,
+            "image_height": 300,
+            "image_height_mobile": 180,
+            "image_fit": "cover",
+            "image_border_radius": 0,
+            "image_spacing": 15,
+            "product_title_font": "system_ui_n4",
+            "product_title_size": 16,
+            "product_title_size_mobile": 14,
+            "product_title_color": "#1c1b1b",
+            "product_title_text_transform": "none",
+            "title_spacing": 8,
+            "product_price_font": "system_ui_n4",
+            "product_price_size": 14,
+            "product_price_size_mobile": 13,
+            "product_price_color": "#1c1b1b",
+            "product_text_alignment": "left"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_478b635_4Px8tK"
+      ],
+      "settings": {}
     },
     "featured_collections_Ftr6CF": {
       "type": "featured-collections",
@@ -888,6 +944,7 @@
     "slideshow",
     "ai_gen_block_b013182_83hmUk",
     "ai_gen_block_fed2d7e_pLXDXE",
+    "176650291494ce3b1f",
     "featured_collections_Ftr6CF",
     "ai_gen_block_eb7330a_WUFPnM",
     "expandable_cards_ab3bCb",
