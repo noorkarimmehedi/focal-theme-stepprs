@@ -68,7 +68,6 @@
         "subheading": "<p>Vastramay brings India’s culture alive with stylish, comfortable ethnic wear for all.</p>",
         "button_label": "Shop Now",
         "button_link": "shopify://products/rosetta-sari",
-        "background_image": "shopify://shop_images/AJ6541_db4c1464-d5a8-48e0-9ad5-fa06850e0e42.webp",
         "placeholder_color": "#f3f3f3",
         "overlay_color": "#000000",
         "overlay_opacity": 10,
@@ -218,7 +217,6 @@
           "type": "card",
           "settings": {
             "title": "Summer Opening",
-            "image": "shopify://shop_images/imgi_92_AnkitaJain29Mar25_1761.jpg",
             "video_url": "",
             "description": "Join us for the Summer Opening event, where we celebrate the start of a vibrant season filled with art and culture.",
             "author_name": "Eduardo Calvo",
@@ -229,7 +227,6 @@
           "type": "card",
           "settings": {
             "title": "Fashion",
-            "image": "shopify://shop_images/imgi_13_AnkitaJain29Mar25_1762.jpg",
             "video_url": "",
             "description": "Explore the latest trends in fashion at our exclusive showcase, featuring renowned designers and unique styles.",
             "author_name": "Sarah Chen",
@@ -240,7 +237,6 @@
           "type": "card",
           "settings": {
             "title": "Gallery Art",
-            "image": "shopify://shop_images/imgi_11_AnkitaJain29Mar25_1764.jpg",
             "video_url": "",
             "description": "Immerse yourself in the world of art at our gallery, showcasing stunning pieces from emerging and established artists.",
             "author_name": "Marcus Johnson",
@@ -251,7 +247,6 @@
           "type": "card",
           "settings": {
             "title": "Dreams",
-            "image": "shopify://shop_images/AJ6541_db4c1464-d5a8-48e0-9ad5-fa06850e0e42.webp",
             "video_url": "",
             "description": "Join us on a journey through dreams, exploring the subconscious and the art of dreaming.",
             "author_name": "Emily Rodriguez",
@@ -265,6 +260,7 @@
         "card_TyyWTq",
         "card_xgdpFT"
       ],
+      "disabled": true,
       "name": "Expandable Cards",
       "settings": {
         "section_title": "Featured Content",
@@ -297,20 +293,18 @@
     },
     "ai_gen_block_e4394c5_XqqACE": {
       "type": "ai_gen_block_e4394c5",
+      "disabled": true,
       "settings": {
         "text_1": "TIMELESS",
         "box_1": "MODERN",
         "show_image_1": true,
-        "image_1": "shopify://shop_images/AJ6541_db4c1464-d5a8-48e0-9ad5-fa06850e0e42.webp",
         "image_1_link": "",
         "box_2": "",
         "text_3": "LOOKS THAT\"S",
         "show_image_3": true,
-        "image_3": "shopify://shop_images/imgi_13_AnkitaJain29Mar25_1762.jpg",
         "image_3_link": "",
         "text_4": "REFINED",
         "show_image_4": true,
-        "image_4": "shopify://shop_images/imgi_11_AnkitaJain29Mar25_1764.jpg",
         "image_4_link": "",
         "box_4": "AND",
         "box_5": "MODERNISED",
@@ -370,11 +364,9 @@
         "summary_font_size": 16,
         "content_font_size": 15,
         "animation_speed": 0.5,
-        "default_image": "shopify://shop_images/imgi_95_AnkitaJain29Mar25_1762.jpg",
         "feature_1_enabled": true,
         "feature_1_title": "Details & Summary",
         "feature_1_content": "<p>A built-in web platform disclosure, accessible by default — no JavaScript required.</p>",
-        "feature_1_image": "shopify://shop_images/imgi_95_AnkitaJain29Mar25_1762.jpg",
         "feature_2_enabled": true,
         "feature_2_title": "Smooth Height",
         "feature_2_content": "<p>Create smooth auto-to-open transitions on height with modern CSS.</p>",
@@ -439,7 +431,6 @@
         "category_MLU7Tz": {
           "type": "category",
           "settings": {
-            "image": "shopify://shop_images/imgi_95_AnkitaJain29Mar25_1762.jpg",
             "title": "Women's Fashion",
             "tag": "Trending",
             "link": ""
@@ -448,7 +439,6 @@
         "category_txXdhB": {
           "type": "category",
           "settings": {
-            "image": "shopify://shop_images/imgi_94_AnkitaJain29Mar25_1757.jpg",
             "title": "Men's Collection",
             "tag": "New Arrivals",
             "link": ""
@@ -457,7 +447,6 @@
         "category_jawbNi": {
           "type": "category",
           "settings": {
-            "image": "shopify://shop_images/imgi_12_AnkitaJain29Mar25_1757.jpg",
             "title": "Accessories",
             "tag": "Best Sellers",
             "link": ""
@@ -466,7 +455,6 @@
         "category_cjRR9B": {
           "type": "category",
           "settings": {
-            "image": "shopify://shop_images/imgi_11_AnkitaJain29Mar25_1764.jpg",
             "title": "Summer Styles",
             "tag": "Seasonal",
             "link": ""
