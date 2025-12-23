@@ -3225,25 +3225,25 @@
       switch (transitionType) {
         case "sweep":
           animation = new CustomAnimation(new SequenceEffect([
-            new CustomKeyframeEffect(this, { visibility: ["visible", "hidden"] }, { duration: 500 }),
+            new CustomKeyframeEffect(this, { visibility: ["visible", "hidden"] }, { duration: 800 }),
             new ParallelEffect(textElements.map((item) => {
               return new CustomKeyframeEffect(item, { opacity: [1, 0], visibility: ["visible", "hidden"] });
             }))
           ]));
           break;
         case "fade":
-          animation = new CustomAnimation(new CustomKeyframeEffect(this, { opacity: [1, 0], visibility: ["visible", "hidden"] }, { duration: 250, easing: "ease-in-out" }));
+          animation = new CustomAnimation(new CustomKeyframeEffect(this, { opacity: [1, 0], visibility: ["visible", "hidden"] }, { duration: 500, easing: "ease-in-out" }));
           break;
         case "reveal":
           animation = new CustomAnimation(new SequenceEffect([
             new ParallelEffect(textElements.reverse().map((item) => {
-              return new CustomKeyframeEffect(item, { opacity: [1, 0], visibility: ["visible", "hidden"] }, { duration: 250, easing: "ease-in-out" });
+              return new CustomKeyframeEffect(item, { opacity: [1, 0], visibility: ["visible", "hidden"] }, { duration: 500, easing: "ease-in-out" });
             })),
             new ParallelEffect(imageElements.map((item) => {
               if (!item.classList.contains("slideshow__image-wrapper--secondary")) {
-                return new CustomKeyframeEffect(item, { visibility: ["visible", "hidden"], clipPath: ["inset(0 0 0 0)", "inset(0 0 100% 0)"] }, { duration: 450, easing: "cubic-bezier(0.99, 0.01, 0.50, 0.94)" });
+                return new CustomKeyframeEffect(item, { visibility: ["visible", "hidden"], clipPath: ["inset(0 0 0 0)", "inset(0 0 100% 0)"] }, { duration: 800, easing: "cubic-bezier(0.645, 0.045, 0.355, 1)" });
               } else {
-                return new CustomKeyframeEffect(item, { visibility: ["visible", "hidden"], clipPath: ["inset(0 0 0 0)", "inset(100% 0 0 0)"] }, { duration: 450, easing: "cubic-bezier(0.99, 0.01, 0.50, 0.94)" });
+                return new CustomKeyframeEffect(item, { visibility: ["visible", "hidden"], clipPath: ["inset(0 0 0 0)", "inset(100% 0 0 0)"] }, { duration: 800, easing: "cubic-bezier(0.645, 0.045, 0.355, 1)" });
               }
             }))
           ]));
@@ -3261,26 +3261,26 @@
       switch (transitionType) {
         case "sweep":
           animation = new CustomAnimation(new SequenceEffect([
-            new CustomKeyframeEffect(this, { visibility: ["hidden", "visible"], clipPath: reverseDirection ? ["inset(0 100% 0 0)", "inset(0 0 0 0)"] : ["inset(0 0 0 100%)", "inset(0 0 0 0)"] }, { duration: 500, easing: "cubic-bezier(1, 0, 0, 1)" }),
+            new CustomKeyframeEffect(this, { visibility: ["hidden", "visible"], clipPath: reverseDirection ? ["inset(0 100% 0 0)", "inset(0 0 0 0)"] : ["inset(0 0 0 100%)", "inset(0 0 0 0)"] }, { duration: 800, easing: "cubic-bezier(0.645, 0.045, 0.355, 1)" }),
             new ParallelEffect(textElements.map((item, index) => {
-              return new CustomKeyframeEffect(item, { opacity: [0, 1], visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"], transform: ["translateY(100%)", "translateY(0)"] }, { duration: 450, delay: 100 * index, easing: "cubic-bezier(0.5, 0.06, 0.01, 0.99)" });
+              return new CustomKeyframeEffect(item, { opacity: [0, 1], visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"], transform: ["translateY(30px)", "translateY(0)"] }, { duration: 800, delay: 100 * index, easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" });
             }))
           ]));
           break;
         case "fade":
-          animation = new CustomAnimation(new CustomKeyframeEffect(this, { opacity: [0, 1], visibility: ["hidden", "visible"] }, { duration: 250, easing: "ease-in-out" }));
+          animation = new CustomAnimation(new CustomKeyframeEffect(this, { opacity: [0, 1], visibility: ["hidden", "visible"] }, { duration: 500, easing: "ease-in-out" }));
           break;
         case "reveal":
           animation = new CustomAnimation(new SequenceEffect([
             new ParallelEffect(imageElements.map((item) => {
               if (!item.classList.contains("slideshow__image-wrapper--secondary")) {
-                return new CustomKeyframeEffect(item, { visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"] }, { duration: 450, delay: 100, easing: "cubic-bezier(0.5, 0.06, 0.01, 0.99)" });
+                return new CustomKeyframeEffect(item, { visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"] }, { duration: 800, delay: 100, easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" });
               } else {
-                return new CustomKeyframeEffect(item, { visibility: ["hidden", "visible"], clipPath: ["inset(100% 0 0 0)", "inset(0 0 0 0)"] }, { duration: 450, delay: 100, easing: "cubic-bezier(0.5, 0.06, 0.01, 0.99)" });
+                return new CustomKeyframeEffect(item, { visibility: ["hidden", "visible"], clipPath: ["inset(100% 0 0 0)", "inset(0 0 0 0)"] }, { duration: 800, delay: 100, easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" });
               }
             })),
             new ParallelEffect(textElements.map((item, index) => {
-              return new CustomKeyframeEffect(item, { opacity: [0, 1], visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"], transform: ["translateY(100%)", "translateY(0)"] }, { duration: 450, delay: 100 * index, easing: "cubic-bezier(0.5, 0.06, 0.01, 0.99)" });
+              return new CustomKeyframeEffect(item, { opacity: [0, 1], visibility: ["hidden", "visible"], clipPath: ["inset(0 0 100% 0)", "inset(0 0 0 0)"], transform: ["translateY(30px)", "translateY(0)"] }, { duration: 800, delay: 100 * index, easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" });
             }))
           ]));
           break;
