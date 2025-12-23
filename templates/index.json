@@ -63,6 +63,7 @@
     },
     "ai_gen_block_b013182_83hmUk": {
       "type": "ai_gen_block_b013182",
+      "disabled": true,
       "settings": {
         "heading": "",
         "subheading": "<p>Stepprs brings Bangladesh’s culture alive with stylish, comfortable ethnic footwear for all.</p>",
