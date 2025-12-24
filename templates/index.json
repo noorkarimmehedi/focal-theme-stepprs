@@ -139,6 +139,36 @@
         "item_10_text": ""
       }
     },
+    "1766561739edfea9ab": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_3e51967_9A7b6i": {
+          "type": "ai_gen_block_3e51967",
+          "settings": {
+            "product": "stepprs-নীল-blue-star-001",
+            "placeholder_title": "Premium Sneaker",
+            "subtitle": "Limited edition colorway",
+            "countdown_end_date": "",
+            "countdown_bg_color": "#e00000",
+            "countdown_text_color": "#ffffff",
+            "countdown_font_size": 16,
+            "image_max_width": 400,
+            "title_font_size": 24,
+            "subtitle_font_size": 14,
+            "price_font_size": 20,
+            "text_color": "#000000",
+            "subtitle_color": "#666666",
+            "add_button_size": 40,
+            "desktop_width_percent": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_3e51967_9A7b6i"
+      ],
+      "settings": {}
+    },
     "1766513435ed6bf646": {
       "type": "_blocks",
       "blocks": {
@@ -894,6 +924,7 @@
     "slideshow",
     "ai_gen_block_b013182_83hmUk",
     "ai_gen_block_fed2d7e_pLXDXE",
+    "1766561739edfea9ab",
     "1766513435ed6bf646",
     "ai_gen_block_eb7330a_WUFPnM",
     "expandable_cards_ab3bCb",
