@@ -1,6 +1,473 @@
+{% doc %}
+  @prompt
+    Design a single featured product card on a white background with thin black borders. Center a large product image. Add a red ‘HOLIDAY SPECIAL’ ribbon at the top. Display product name and subtitle below, price aligned right, and a small plus icon for quick add. Clean, editorial sneaker-brand aesthetic., price and quick add to cart should be in the center and and also there should be a gap on left and right side ob mobile version. just 8px gap
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-featured-product-card-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ai-featured-product-card__container-{{ ai_gen_id }} {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    position: relative;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: {{ block.settings.desktop_width_percent }}%;
+    margin: 0 auto;
+  }
+
+  .ai-featured-product-card__ribbon-{{ ai_gen_id }} {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: {{ block.settings.ribbon_color }};
+    color: {{ block.settings.ribbon_text_color }};
+    padding: 8px 24px;
+    font-size: {{ block.settings.ribbon_font_size }}px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  .ai-featured-product-card__image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.image_max_width }}px;
+    margin: 40px 0 30px;
+    position: relative;
+  }
+
+  .ai-featured-product-card__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-featured-product-card__image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-featured-product-card__image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-featured-product-card__empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-featured-product-card__content-{{ ai_gen_id }} {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ai-featured-product-card__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .ai-featured-product-card__subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_font_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .ai-featured-product-card__footer-{{ ai_gen_id }} {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .ai-featured-product-card__price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin-left: auto;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }} {
+    width: {{ block.settings.add_button_size }}px;
+    height: {{ block.settings.add_button_size }}px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin-left: 16px;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }}:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-featured-product-card__container-{{ ai_gen_id }} {
+      width: calc(100% - 16px);
+      padding: 30px 20px;
+      margin: 0 8px;
+    }
+
+    .ai-featured-product-card__ribbon-{{ ai_gen_id }} {
+      font-size: {{ block.settings.ribbon_font_size | times: 0.85 }}px;
+      padding: 6px 20px;
+      top: 15px;
+    }
+
+    .ai-featured-product-card__image-wrapper-{{ ai_gen_id }} {
+      margin: 30px 0 20px;
+    }
+
+    .ai-featured-product-card__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.85 }}px;
+    }
+
+    .ai-featured-product-card__subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_font_size | times: 0.9 }}px;
+    }
+
+    .ai-featured-product-card__price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.price_font_size | times: 0.9 }}px;
+    }
+
+    .ai-featured-product-card__footer-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-featured-product-card__price-{{ ai_gen_id }} {
+      margin-left: 0;
+    }
+  }
+{% endstyle %}
+
+<featured-product-card-{{ ai_gen_id }}
+  class="ai-featured-product-card-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-featured-product-card__container-{{ ai_gen_id }}">
+    <div class="ai-featured-product-card__ribbon-{{ ai_gen_id }}">
+      {{ block.settings.ribbon_text }}
+    </div>
+
+    <div class="ai-featured-product-card__image-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.product %}
+        {% if block.settings.product.featured_image %}
+          <img
+            src="{{ block.settings.product.featured_image | image_url: width: 1000 }}"
+            alt="{{ block.settings.product.featured_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.product.featured_image.width }}"
+            height="{{ block.settings.product.featured_image.height }}"
+            class="ai-featured-product-card__image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-featured-product-card__image-placeholder-{{ ai_gen_id }}">
+            {{ 'product-1' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="ai-featured-product-card__image-placeholder-{{ ai_gen_id }}">
+          {{ 'product-1' | placeholder_svg_tag }}
+          <div class="ai-featured-product-card__empty-state-{{ ai_gen_id }}">
+            Next, select a product
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ai-featured-product-card__content-{{ ai_gen_id }}">
+      <h3 class="ai-featured-product-card__title-{{ ai_gen_id }}">
+        {% if block.settings.product %}
+          {{ block.settings.product.title }}
+        {% else %}
+          {{ block.settings.placeholder_title }}
+        {% endif %}
+      </h3>
+
+      {% if block.settings.subtitle != blank %}
+        <div class="ai-featured-product-card__subtitle-{{ ai_gen_id }}">
+          {{ block.settings.subtitle }}
+        </div>
+      {% endif %}
+
+      <div class="ai-featured-product-card__footer-{{ ai_gen_id }}">
+        <div class="ai-featured-product-card__price-{{ ai_gen_id }}">
+          {% if block.settings.product %}
+            {{ block.settings.product.price | money }}
+          {% else %}
+            {{ 10000 | money }}
+          {% endif %}
+        </div>
+
+        <button
+          class="ai-featured-product-card__add-button-{{ ai_gen_id }}"
+          aria-label="Quick add to cart"
+          data-product-id="{% if block.settings.product %}{{ block.settings.product.id }}{% endif %}"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</featured-product-card-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeaturedProductCard{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.addButton = this.querySelector('.ai-featured-product-card__add-button-{{ ai_gen_id }}');
+        if (this.addButton) {
+          this.addButton.addEventListener('click', this.handleAddToCart.bind(this));
+        }
+      }
+
+      handleAddToCart(event) {
+        event.preventDefault();
+        const productId = this.addButton.dataset.productId;
+
+        if (!productId) {
+          return;
+        }
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: productId,
+            quantity: 1
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          window.dispatchEvent(new CustomEvent('cart:refresh'));
+          if (window.theme && window.theme.openCart) {
+            window.theme.openCart();
+          }
+        })
+        .catch(error => {
+          console.error('Error adding to cart:', error);
+        });
+      }
+    }
+
+    customElements.define('featured-product-card-{{ ai_gen_id }}', FeaturedProductCard{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Featured product card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_title",
+      "label": "Placeholder title",
+      "default": "Premium Sneaker"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Limited edition colorway"
+    },
+    {
+      "type": "header",
+      "content": "Ribbon"
+    },
+    {
+      "type": "text",
+      "id": "ribbon_text",
+      "label": "Ribbon text",
+      "default": "Holiday Special"
+    },
+    {
+      "type": "color",
+      "id": "ribbon_color",
+      "label": "Background",
+      "default": "#e00000"
+    },
+    {
+      "type": "color",
+      "id": "ribbon_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "ribbon_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "min": 14,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Price size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Quick add button"
+    },
+    {
+      "type": "range",
+      "id": "add_button_size",
+      "min": 30,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Button size",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product card"
+    }
+  ]
+}
 {% endschema %}
