@@ -1,6 +1,589 @@
+{% doc %}
+  @prompt
+    Design a single featured product card on a white background with thin black borders. Center a large product image. Add a red ‘HOLIDAY SPECIAL’ ribbon at the top. Display product name and subtitle below, price aligned right, and a small plus icon for quick add. Clean, editorial sneaker-brand aesthetic., price and quick add to cart should be in the center and and also there should be a gap on left and right side ob mobile version. just 8px gap, instead of the Ribbon i want 24 hours countdown. also the product image should fit the whole image container both mobile and desktop and move the countdown to the overlay of the image with left alligment 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-featured-product-card-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ai-featured-product-card__container-{{ ai_gen_id }} {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    position: relative;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: {{ block.settings.desktop_width_percent }}%;
+    margin: 0 auto;
+  }
+
+  .ai-featured-product-card__image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.image_max_width }}px;
+    margin: 0 0 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-featured-product-card__image-container-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+  }
+
+  .ai-featured-product-card__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-featured-product-card__image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-featured-product-card__image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-featured-product-card__empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-featured-product-card__countdown-{{ ai_gen_id }} {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: {{ block.settings.countdown_bg_color }};
+    color: {{ block.settings.countdown_text_color }};
+    padding: 12px 20px;
+    font-size: {{ block.settings.countdown_font_size }}px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .ai-featured-product-card__countdown-unit-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .ai-featured-product-card__countdown-value-{{ ai_gen_id }} {
+    font-size: {{ block.settings.countdown_font_size }}px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .ai-featured-product-card__countdown-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.countdown_font_size | times: 0.6 }}px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    line-height: 1;
+  }
+
+  .ai-featured-product-card__countdown-separator-{{ ai_gen_id }} {
+    font-size: {{ block.settings.countdown_font_size }}px;
+    font-weight: 700;
+    opacity: 0.6;
+  }
+
+  .ai-featured-product-card__content-{{ ai_gen_id }} {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ai-featured-product-card__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .ai-featured-product-card__subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_font_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .ai-featured-product-card__footer-{{ ai_gen_id }} {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .ai-featured-product-card__price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin-left: auto;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }} {
+    width: {{ block.settings.add_button_size }}px;
+    height: {{ block.settings.add_button_size }}px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin-left: 16px;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }}:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .ai-featured-product-card__add-button-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-featured-product-card__container-{{ ai_gen_id }} {
+      width: calc(100% - 16px);
+      padding: 30px 20px;
+      margin: 0 8px;
+    }
+
+    .ai-featured-product-card__countdown-{{ ai_gen_id }} {
+      top: 15px;
+      left: 15px;
+      padding: 10px 16px;
+      gap: 12px;
+    }
+
+    .ai-featured-product-card__countdown-value-{{ ai_gen_id }} {
+      font-size: {{ block.settings.countdown_font_size | times: 0.85 }}px;
+    }
+
+    .ai-featured-product-card__countdown-label-{{ ai_gen_id }} {
+      font-size: {{ block.settings.countdown_font_size | times: 0.5 }}px;
+    }
+
+    .ai-featured-product-card__countdown-separator-{{ ai_gen_id }} {
+      font-size: {{ block.settings.countdown_font_size | times: 0.85 }}px;
+    }
+
+    .ai-featured-product-card__image-wrapper-{{ ai_gen_id }} {
+      margin: 0 0 20px;
+    }
+
+    .ai-featured-product-card__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.85 }}px;
+    }
+
+    .ai-featured-product-card__subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_font_size | times: 0.9 }}px;
+    }
+
+    .ai-featured-product-card__price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.price_font_size | times: 0.9 }}px;
+    }
+
+    .ai-featured-product-card__footer-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-featured-product-card__price-{{ ai_gen_id }} {
+      margin-left: 0;
+    }
+  }
+{% endstyle %}
+
+<featured-product-card-{{ ai_gen_id }}
+  class="ai-featured-product-card-{{ ai_gen_id }}"
+  data-countdown-end="{{ block.settings.countdown_end_date }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-featured-product-card__container-{{ ai_gen_id }}">
+    <div class="ai-featured-product-card__image-wrapper-{{ ai_gen_id }}">
+      <div class="ai-featured-product-card__image-container-{{ ai_gen_id }}">
+        {% if block.settings.product %}
+          {% if block.settings.product.featured_image %}
+            <img
+              src="{{ block.settings.product.featured_image | image_url: width: 1000 }}"
+              alt="{{ block.settings.product.featured_image.alt | escape }}"
+              loading="lazy"
+              width="{{ block.settings.product.featured_image.width }}"
+              height="{{ block.settings.product.featured_image.height }}"
+              class="ai-featured-product-card__image-{{ ai_gen_id }}"
+            >
+          {% else %}
+            <div class="ai-featured-product-card__image-placeholder-{{ ai_gen_id }}">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="ai-featured-product-card__image-placeholder-{{ ai_gen_id }}">
+            {{ 'product-1' | placeholder_svg_tag }}
+            <div class="ai-featured-product-card__empty-state-{{ ai_gen_id }}">
+              Next, select a product
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="ai-featured-product-card__countdown-{{ ai_gen_id }}">
+          <div class="ai-featured-product-card__countdown-unit-{{ ai_gen_id }}">
+            <span class="ai-featured-product-card__countdown-value-{{ ai_gen_id }}" data-hours>00</span>
+            <span class="ai-featured-product-card__countdown-label-{{ ai_gen_id }}">hrs</span>
+          </div>
+          <span class="ai-featured-product-card__countdown-separator-{{ ai_gen_id }}">:</span>
+          <div class="ai-featured-product-card__countdown-unit-{{ ai_gen_id }}">
+            <span class="ai-featured-product-card__countdown-value-{{ ai_gen_id }}" data-minutes>00</span>
+            <span class="ai-featured-product-card__countdown-label-{{ ai_gen_id }}">min</span>
+          </div>
+          <span class="ai-featured-product-card__countdown-separator-{{ ai_gen_id }}">:</span>
+          <div class="ai-featured-product-card__countdown-unit-{{ ai_gen_id }}">
+            <span class="ai-featured-product-card__countdown-value-{{ ai_gen_id }}" data-seconds>00</span>
+            <span class="ai-featured-product-card__countdown-label-{{ ai_gen_id }}">sec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-featured-product-card__content-{{ ai_gen_id }}">
+      <h3 class="ai-featured-product-card__title-{{ ai_gen_id }}">
+        {% if block.settings.product %}
+          {{ block.settings.product.title }}
+        {% else %}
+          {{ block.settings.placeholder_title }}
+        {% endif %}
+      </h3>
+
+      {% if block.settings.subtitle != blank %}
+        <div class="ai-featured-product-card__subtitle-{{ ai_gen_id }}">
+          {{ block.settings.subtitle }}
+        </div>
+      {% endif %}
+
+      <div class="ai-featured-product-card__footer-{{ ai_gen_id }}">
+        <div class="ai-featured-product-card__price-{{ ai_gen_id }}">
+          {% if block.settings.product %}
+            {{ block.settings.product.price | money }}
+          {% else %}
+            {{ 10000 | money }}
+          {% endif %}
+        </div>
+
+        <button
+          class="ai-featured-product-card__add-button-{{ ai_gen_id }}"
+          aria-label="Quick add to cart"
+          data-product-id="{% if block.settings.product %}{{ block.settings.product.id }}{% endif %}"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</featured-product-card-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeaturedProductCard{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.countdownInterval = null;
+      }
+
+      connectedCallback() {
+        this.addButton = this.querySelector('.ai-featured-product-card__add-button-{{ ai_gen_id }}');
+        this.hoursElement = this.querySelector('[data-hours]');
+        this.minutesElement = this.querySelector('[data-minutes]');
+        this.secondsElement = this.querySelector('[data-seconds]');
+        
+        if (this.addButton) {
+          this.addButton.addEventListener('click', this.handleAddToCart.bind(this));
+        }
+
+        this.startCountdown();
+      }
+
+      disconnectedCallback() {
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+        }
+      }
+
+      startCountdown() {
+        const countdownEndDate = this.dataset.countdownEnd;
+        
+        if (!countdownEndDate) {
+          const now = new Date();
+          const endTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+          this.updateCountdown(endTime);
+          this.countdownInterval = setInterval(() => this.updateCountdown(endTime), 1000);
+          return;
+        }
+
+        const endTime = new Date(countdownEndDate);
+        this.updateCountdown(endTime);
+        this.countdownInterval = setInterval(() => this.updateCountdown(endTime), 1000);
+      }
+
+      updateCountdown(endTime) {
+        const now = new Date();
+        const difference = endTime - now;
+
+        if (difference <= 0) {
+          this.hoursElement.textContent = '00';
+          this.minutesElement.textContent = '00';
+          this.secondsElement.textContent = '00';
+          if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+          }
+          return;
+        }
+
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        this.hoursElement.textContent = String(hours).padStart(2, '0');
+        this.minutesElement.textContent = String(minutes).padStart(2, '0');
+        this.secondsElement.textContent = String(seconds).padStart(2, '0');
+      }
+
+      handleAddToCart(event) {
+        event.preventDefault();
+        const productId = this.addButton.dataset.productId;
+
+        if (!productId) {
+          return;
+        }
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: productId,
+            quantity: 1
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          window.dispatchEvent(new CustomEvent('cart:refresh'));
+          if (window.theme && window.theme.openCart) {
+            window.theme.openCart();
+          }
+        })
+        .catch(error => {
+          console.error('Error adding to cart:', error);
+        });
+      }
+    }
+
+    customElements.define('featured-product-card-{{ ai_gen_id }}', FeaturedProductCard{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Featured product card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_title",
+      "label": "Placeholder title",
+      "default": "Premium Sneaker"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Limited edition colorway"
+    },
+    {
+      "type": "header",
+      "content": "Countdown"
+    },
+    {
+      "type": "text",
+      "id": "countdown_end_date",
+      "label": "End date and time",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2025-12-25 23:59:59). Leave blank for 24-hour countdown from now."
+    },
+    {
+      "type": "color",
+      "id": "countdown_bg_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "countdown_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "countdown_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "min": 14,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Price size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Quick add button"
+    },
+    {
+      "type": "range",
+      "id": "add_button_size",
+      "min": 30,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Button size",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product card"
+    }
+  ]
+}
 {% endschema %}
